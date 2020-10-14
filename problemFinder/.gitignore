@@ -1,0 +1,14 @@
+# Django 
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# DB
+db.sqlite3
+db.sqlite3-journal
+
+# env
+.env
+myproject.egg-info
