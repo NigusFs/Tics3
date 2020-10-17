@@ -9,13 +9,13 @@ class Problem(models.Model):
 
 
 class TestCase(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, related_name="tests", on_delete=models.CASCADE)
     input_data = models.CharField(max_length=1000)
     output_data = models.CharField(max_length=1000)
 
 
 class Category(models.Model):
-    problems = models.ManyToManyField(Problem)
+    problems = models.ManyToManyField(Problem, related_name="categories")
     name = models.CharField(max_length=25)
     class Meta:
         indexes = [

@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'finder.apps.FinderConfig'
+    'rest_framework',
+    'finder.apps.FinderConfig',
 ]
 
 MIDDLEWARE = [

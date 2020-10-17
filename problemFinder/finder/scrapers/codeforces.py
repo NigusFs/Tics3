@@ -99,5 +99,5 @@ def get_problem_statement(url) -> Problem:
     output_specification = "\nOutput\n"+"\n".join([paragraph.text for paragraph in output_specification.select("div > p")]) if output_specification else ""
     content += input_specification + output_specification
     
-    test_cases = [TestCase(test_input=inputs[i], output=outputs[i]) for i in range(len(inputs))]
+    test_cases = [TestCase(input_data=inputs[i], output_data=outputs[i]) for i in range(len(inputs))]
     return Problem(title=title, content=content, difficulty=difficulty, source=url, testcases=test_cases, categories=categories)
