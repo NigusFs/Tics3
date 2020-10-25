@@ -66,5 +66,5 @@ def extract_problem(code) -> Problem:
 
 	return Problem(titulo,enunciado,dificultad,"DMOJ",test_case,categoria)
 	
-number_pages=0.1
-print(extract_many(number_pages))
+#number_pages=0.1
+#print(extract_many(number_pages))
