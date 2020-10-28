@@ -34,3 +34,17 @@ class ProblemView(View):
         return JsonResponse({
             'description': "Problem deleted successfully :)"
         }, status=200)
+
+class FilterByCategoryView(View):
+    def get(self, request, category):
+        problems = Problem.objects.filter(categories__name=category)
+        problems_serializer = ProblemSerializer(problems, many=True)
+        return JsonResponse(problems_serializer.data, safe=False, status=200)
+
+class FilterByDifficultyView(View):
+    def get(self, request, difficulty):
+        problems = Problem.objects.filter(difficulty=difficulty)
+        problems_serializer = ProblemSerializer(problems, many=True)
+        return JsonResponse(problems_serializer.data, safe=False, status=200)
+
+
