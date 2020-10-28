@@ -93,8 +93,15 @@ def extract_dificultad(code):
 		dificultad="Facil"
 	return dificultad
 
+<<<<<<< HEAD
 def main():
     print(extract_many(1))
 
 if __name__ == "__main__":
     main()
+=======
+	return Problem(titulo,enunciado,dificultad,"DMOJ",test_case,categoria)
+	
+#number_pages=0.1
+#print(extract_many(number_pages))
+>>>>>>> 333f597387f9979052593702520c9ef13cb2aaf7
