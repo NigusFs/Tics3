@@ -3,8 +3,10 @@ import array
 from bs4 import BeautifulSoup
 import requests
 import time
+import logging
 from finder.entities import Problem, TestCase
 import re
+logger = logging.getLogger(__name__)
 regex = re.compile('.*(Input|Output):?\s*([\w&.\-\s]*)\n?')
 import sys
 
@@ -47,7 +49,7 @@ def codechef(difficulty, start, quantity):
     soup = BeautifulSoup(page_response.text, 'lxml')
     table = soup.find('tbody').find_all('tr')
     url = "https://www.codechef.com/api/contests/PRACTICE" 
-
+    problems = []
     cont = 0
     for i in range(start,len(table)):
         aux = table[i].td.div.a['href']
@@ -58,12 +60,14 @@ def codechef(difficulty, start, quantity):
             if res.json()['status'] == 'error': continue   
             if Parser(res.json(),difficulty) == None: continue      
             else: 
-                print (Parser(res.json(),difficulty))
+                problems.append(Parser(res.json(),difficulty))           
                 cont = cont + 1
                 if cont == quantity: break
-        else: print ("error")
+        else: 
+            logger.info("Found and error trying to open URL:%s %s"%(url_aux, res.status_code))
         time.sleep(1)
-#314 medium
+    return problems
+#314 mediums
 #446 easy
 #93 hard
 
