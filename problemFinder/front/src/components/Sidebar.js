@@ -27,24 +27,19 @@ class SideBar extends React.Component {
         <Layout>
           
             <div className="logo" />
-            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-              <Menu.Item key="1" icon={<PieChartOutlined />}>
-                Option 1
-              </Menu.Item>
-              <Menu.Item key="2" icon={<DesktopOutlined />}>
-                Option 2
-              </Menu.Item>
-              <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-                <Menu.Item key="3">Tom</Menu.Item>
-                <Menu.Item key="4">Bill</Menu.Item>
-                <Menu.Item key="5">Alex</Menu.Item>
+            <Menu theme="dark"  mode="inline">
+              
+              <SubMenu key="sub1" icon={<UserOutlined />} title="Categorias">
+                <Menu.Item key="3">graph</Menu.Item>
+                <Menu.Item key="4">...</Menu.Item>
+                <Menu.Item key="5">lista de categorias....</Menu.Item>
               </SubMenu>
-              <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-                <Menu.Item key="6">Team 1</Menu.Item>
-                <Menu.Item key="8">Team 2</Menu.Item>
+              <SubMenu key="sub2" icon={<TeamOutlined />} title="Dificultad">
+                <Menu.Item key="6">Facil</Menu.Item>
+                <Menu.Item key="8">...lista...</Menu.Item>
               </SubMenu>
               <Menu.Item key="9" icon={<FileOutlined />}>
-                Files
+                Descargar
               </Menu.Item>
             </Menu>
           

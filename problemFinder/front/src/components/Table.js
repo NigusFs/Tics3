@@ -25,22 +25,21 @@ function TableProblems() {
     fetchTable();
   }, []);
 
-  return (
-       
-    <Table dataSource={data}>
-     
-     <Column title="Title" key="title" 
-     render={data=>(
-      <Link to={'Problem/'+data.pk}>{data.title}</Link>
-     )}
-     /> 
-    <Column title="Dificulty" dataIndex="difficulty" key="age" />
+  const list_category = () =>{
     
-    <Column
-      title="Categories"
-      dataIndex="categories"
-      key="categories"
-      render={categories => (
+  }
+
+  const columns =[
+    {
+      title: "Title",
+      render : data=>(
+        <Link to={'Problem/'+data.pk}>{data.title}</Link>
+       )
+    },
+    {
+      title: "Category",
+      dataIndex: "categories",
+      render: categories => (
         <>
           {categories.map(tag => (
             <Tag color="blue" key={tag.name}>
@@ -48,11 +47,25 @@ function TableProblems() {
             </Tag>
           ))}
         </>
-      )}
-    />
+      ),
+      filters: data.map(data => ({text: JSON.stringify(data.categories), value:data.categories } )),
+      
+      onFilter: (value, record) => record.categories.indexOf(value) === 0,
+    },
+    {
+      title: "Difficulty",
+      dataIndex: "difficulty",
+      filters: data.map(data => ({text: data.difficulty, value:data.difficulty } )),
+      onFilter: (value, record) => record.difficulty.indexOf(value) === 0,
+      
+    }
+
+  ];
+  return (
+       
+    <Table dataSource={data} columns={columns}/>
+     
     
-    
-  </Table>
         
         
     
