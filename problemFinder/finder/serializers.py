@@ -18,9 +18,10 @@ class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Problem
         fields = [
+            'pk',
             'title',
             'content',
             'difficulty',
             'tests',
-            'categories'
+            'categories',
         ]
