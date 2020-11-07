@@ -26,7 +26,7 @@ function TableProblems() {
   }, []);
 
   const list_category = () =>{
-    
+    //aca debe exitir un arreglo que guarde todos las categorias de cada problema (una sola vez, ya que estos se repiten)
   }
 
   const columns =[
