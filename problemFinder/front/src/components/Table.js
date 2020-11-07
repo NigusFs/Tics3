@@ -34,7 +34,11 @@ function TableProblems() {
       title: "Title",
       render : data=>(
         <Link to={'Problem/'+data.pk}>{data.title}</Link>
-       )
+       ),
+       sorter: {
+        compare: (a, b) => a.title.length - b.title.length,
+        sortDirections: ['descend'],
+      }
     },
     {
       title: "Category",
@@ -48,15 +52,14 @@ function TableProblems() {
           ))}
         </>
       ),
-      filters: data.map(data => ({text: JSON.stringify(data.categories), value:data.categories } )),
-      
-      onFilter: (value, record) => record.categories.indexOf(value) === 0,
     },
     {
       title: "Difficulty",
       dataIndex: "difficulty",
-      filters: data.map(data => ({text: data.difficulty, value:data.difficulty } )),
-      onFilter: (value, record) => record.difficulty.indexOf(value) === 0,
+      sorter: {
+        compare: (a, b) => a.difficulty.length - b.difficulty.length,
+        sortDirections: ['descend'],
+      }
       
     }
 
