@@ -8,7 +8,7 @@ import { Collapse } from 'antd';
 
 const { Panel } = Collapse;
 function Problem ({match}){
-    const [data_problem, setData] = useState([]);
+  const [data_problem, setData] = useState([]);
 
   const fetchTable = () => {
      
