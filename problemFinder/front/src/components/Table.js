@@ -12,21 +12,11 @@ function ViewProblem  (pk) {
 }
        
 
-function TableProblems() {
-  
-  const [data, setData] = useState([]);
-
-  const fetchTable = () => {
-    fetch('http://127.0.0.1:8000/finder/problems')
-        .then(res => res.json())
-        .then(json => setData(json));
-  }
-  useEffect(() => {
-    fetchTable();
-  }, []);
+function TableProblems(props) {
 
   const list_category = () =>{
     //aca debe exitir un arreglo que guarde todos las categorias de cada problema (una sola vez, ya que estos se repiten)
+    // hacer una llamada al back para obtener todas las categorias izi
   }
 
   const columns =[
@@ -66,7 +56,7 @@ function TableProblems() {
   ];
   return (
        
-    <Table dataSource={data} columns={columns}/>
+    <Table dataSource={props.list_problems} columns={columns}/>
      
     
         
