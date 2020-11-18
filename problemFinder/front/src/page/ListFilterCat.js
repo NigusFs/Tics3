@@ -10,7 +10,7 @@ import Sidebar from '../components/Sidebar';
 import 'antd/dist/antd.css'
 import { Layout } from 'antd';
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 
@@ -22,11 +22,10 @@ function ListFilterDif ({match}){
 
   const fetchTable = () => {
      
-    fetch(`http://127.0.0.1:8000/finder/filter/difficulty/${match.params.difficulty}`)
+    fetch(`http://127.0.0.1:8000/finder/filter/category/${match.params.category}`)
         .then(res => res.json())
         .then(json => setData(json));
       }
-
       useEffect(() => {
         fetchTable();
       }, []);
@@ -47,7 +46,6 @@ function ListFilterDif ({match}){
             minHeight: 280,
           }}>
            <Table list_problems={data_filter}/>
-           
         </Content>
         
       </Layout>

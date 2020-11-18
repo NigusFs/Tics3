@@ -1,33 +1,42 @@
 import { Layout, Menu } from 'antd';
 import React from 'react';
 import {
-    DesktopOutlined,
-    PieChartOutlined,
     FileOutlined,
     TeamOutlined,
     UserOutlined,
   } from '@ant-design/icons';
-  import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+  
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const { SubMenu } = Menu;
 
 class SideBar extends React.Component {
     state = {
       collapsed: false,
+      data: [],
     };
   
     onCollapse = collapsed => {
       console.log(collapsed);
       this.setState({ collapsed });
     };
+
+    componentDidMount(){
+      fetch('http://127.0.0.1:8000/finder/categories')
+      .then(response => response.json())
+      .then(data => this.setState({data}));
+
+
+    }
     
     render() {
       const { collapsed } = this.state;
+      
       return (
         <Layout>
           
             <div className="logo" />
-            <Menu theme="dark"  mode="inline" defaultOpenKeys={['sub2']}>
+            <Menu theme="dark"  mode="inline" defaultOpenKeys={['sub2','sub1']}>
 
               <Menu.Item key="10" icon={<FileOutlined />}>
                 <Link to ="/">Descargar</Link> 
@@ -40,9 +49,12 @@ class SideBar extends React.Component {
               </SubMenu>
 
               <SubMenu key="sub1" icon={<UserOutlined />} title="Categorias">
-                <Menu.Item key="3">graph</Menu.Item>
-                <Menu.Item key="4">...</Menu.Item>
-                <Menu.Item key="5">lista de categorias....</Menu.Item>
+
+                {this.state.data.map(tag => (
+                  <Menu.Item key={tag.name}>
+                    <a href={"/list-filter/category/" + tag.name}>{tag.name}</a>
+                  </Menu.Item>
+                ))}
               </SubMenu>
               
             </Menu>
