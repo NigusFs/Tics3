@@ -4,6 +4,7 @@ from django.views import View
 
 from .models import Problem, TestCase, Category
 from .serializers import ProblemSerializer
+from .serializers import CategorySerializer
 
 class ProblemView(View):
     def get(self, request, problem_id):
@@ -52,3 +53,9 @@ class ListProblems(View): #no estoy seguro de esto quiero hacer que retorne la l
         list_problems = Problem.objects.all()
         problems_serializer = ProblemSerializer(list_problems, many=True)
         return JsonResponse(problems_serializer.data, safe=False, status=200)
+
+class ListCategories(View): #no estoy seguro de esto quiero hacer que retorne la lista de los problemas
+    def get(self, request):
+        list_categories = Category.objects.all()
+        category_serializer = CategorySerializer(list_categories, many=True)
+        return JsonResponse(category_serializer.data, safe=False, status=200)

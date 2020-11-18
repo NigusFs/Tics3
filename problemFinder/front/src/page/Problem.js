@@ -3,10 +3,20 @@
 import React, {useEffect, useState, Content} from 'react';
 
 
+import ReactDOM from 'react-dom';
+import { PDFViewer } from '@react-pdf/renderer';
+
 import './Problem.css';
 import { Collapse } from 'antd';
+import PdfMake from '../components/PdfMake';
+
+
 
 const { Panel } = Collapse;
+
+
+
+
 function Problem ({match}){
   const [data_problem, setData] = useState([]);
 
@@ -14,28 +24,36 @@ function Problem ({match}){
      
     fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
         .then(res => res.json())
-        .then(json => setData(json));
+        .then(json => {
+          return setData(json) 
+          
+        } );
+        
       }
       useEffect(() => {
         fetchTable();
       }, []);
 
         return(
+      <div>
+        <div  class="algo" ><PdfMake data={data_problem}/> </div>
+          <div class="center-nose">
+              <Collapse defaultActiveKey={['1','2']} style={{width: 800}} >
+              <Panel header="Title" key="1">
+                <p>{data_problem.title}</p>
+              </Panel>
+              <Panel header="Content" key="2">
+                <p>{data_problem.content}</p>
+              </Panel>
+              <Panel header="Testscase" key="3">
+                <p>{data_problem.tests} </p> 
+              </Panel>
+            </Collapse>
             
-                
-          <Collapse defaultActiveKey={['1','2']}>
-          <Panel header="Title" key="1">
-            <p>{data_problem.title}</p>
-          </Panel>
-          <Panel header="Content" key="2">
-            <p>{data_problem.content}</p>
-          </Panel>
-          <Panel header="Testscase" key="3">
-            <p>{data_problem.tests}</p>
-          </Panel>
-        </Collapse>
-                               
-            
+          </div > 
+              
+        
+      </div>   
         );
     
 }  

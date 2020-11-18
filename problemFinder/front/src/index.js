@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import ListProblems from './page/ListProblems';
-import Problem from './page/Problem';
 import Main from './page/Main';
 import reportWebVitals from './reportWebVitals';
 

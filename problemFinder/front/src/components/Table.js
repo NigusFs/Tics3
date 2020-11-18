@@ -1,10 +1,10 @@
-import React, {useEffect, useState, Content} from 'react';
+import React from 'react';
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Table, Tag, Space } from 'antd';
-const { Column, ColumnGroup } = Table;
+import { Table, Tag} from 'antd';
+
 
 function ViewProblem  (pk) {
 
@@ -23,7 +23,7 @@ function TableProblems(props) {
     {
       title: "Title",
       render : data=>(
-        <Link to={'Problem/'+data.pk}>{data.title}</Link>
+        <Link to={'/Problem/'+data.pk}>{data.title}</Link>
        ),
        sorter: {
         compare: (a, b) => a.title.length - b.title.length,
