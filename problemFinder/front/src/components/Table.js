@@ -21,7 +21,7 @@ function TableProblems(props) {
 
   const columns =[
     {
-      title: "Title",
+      title: "Título",
       render : data=>(
         <Link to={'/Problem/'+data.pk}>{data.title}</Link>
        ),
@@ -31,7 +31,7 @@ function TableProblems(props) {
       }
     },
     {
-      title: "Category",
+      title: "Categoría",
       dataIndex: "categories",
       render: categories => (
         <>
@@ -44,7 +44,7 @@ function TableProblems(props) {
       ),
     },
     {
-      title: "Difficulty",
+      title: "Dificultad",
       dataIndex: "difficulty",
       sorter: {
         compare: (a, b) => a.difficulty.length - b.difficulty.length,
