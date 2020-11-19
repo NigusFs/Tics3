@@ -44,8 +44,8 @@ class SideBar extends React.Component {
               */}
               <SubMenu key="sub2" icon={<TeamOutlined />} title="Dificultad">
                 <Menu.Item key="6"> <a href="/list-filter/difficulty/Facil">Fácil</a> </Menu.Item>
-                <Menu.Item key="8"> <a href="/list-filter/difficulty/normal">Normal</a></Menu.Item>
-                <Menu.Item key="9"><a href="/list-filter/difficulty/Alta">Alta</a></Menu.Item>
+                <Menu.Item key="8"> <a href="/list-filter/difficulty/Medio">Medio</a></Menu.Item>
+                <Menu.Item key="9"><a href="/list-filter/difficulty/Dificil">Dificil</a></Menu.Item>
               </SubMenu>
 
               <SubMenu key="sub1" icon={<UserOutlined />} title="Categorías">

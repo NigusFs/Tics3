@@ -95,11 +95,11 @@ def extract_dificultad(code):
 	points_problem = requests.get("https://dmoj.ca/api/v2/problem/{}".format(code)).json()['data']['object']['points']
 
 	if  points_problem >40:
-		dificultad="hard"
+		dificultad="Dificil"
 	elif points_problem >20:
-		dificultad="medium"
+		dificultad="Medio"
 	else:
-		dificultad="easy"
+		dificultad="Facil"
 	return dificultad
 
 def main():
