@@ -48,13 +48,13 @@ class FilterByDifficultyView(View):
         problems_serializer = ProblemSerializer(problems, many=True)
         return JsonResponse(problems_serializer.data, safe=False, status=200)
 
-class ListProblems(View): #no estoy seguro de esto quiero hacer que retorne la lista de los problemas
+class ListProblems(View): 
     def get(self, request):
         list_problems = Problem.objects.all()
         problems_serializer = ProblemSerializer(list_problems, many=True)
         return JsonResponse(problems_serializer.data, safe=False, status=200)
 
-class ListCategories(View): #no estoy seguro de esto quiero hacer que retorne la lista de los problemas
+class ListCategories(View): 
     def get(self, request):
         list_categories = Category.objects.all()
         category_serializer = CategorySerializer(list_categories, many=True)

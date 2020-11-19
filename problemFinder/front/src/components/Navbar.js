@@ -29,9 +29,9 @@ function NavBarr() {
                 </Navbar.Brand>
 
                 <Nav className="mr-auto">
-                <Nav.Link> <Link to="/">Home</Link></Nav.Link>
+                <Nav.Link> <Link to="/">Inicio</Link></Nav.Link>
                
-                <Nav.Link> <Link to="/list-problems">List Problems</Link></Nav.Link>
+                <Nav.Link> <Link to="/list-problems">Lista de Problemas</Link></Nav.Link>
                 
                         
                 </Nav>

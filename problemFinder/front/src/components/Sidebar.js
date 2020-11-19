@@ -38,17 +38,17 @@ class SideBar extends React.Component {
             <div className="logo" />
             <Menu theme="dark"  mode="inline" defaultOpenKeys={['sub2','sub1']}>
 
-              <Menu.Item key="10" icon={<FileOutlined />}>
+              {/*<Menu.Item key="10" icon={<FileOutlined />}>
                 <Link to ="/">Descargar</Link> 
               </Menu.Item>
-              
+              */}
               <SubMenu key="sub2" icon={<TeamOutlined />} title="Dificultad">
-                <Menu.Item key="6"> <a href="/list-filter/difficulty/Facil">Facil</a> </Menu.Item>
+                <Menu.Item key="6"> <a href="/list-filter/difficulty/Facil">Fácil</a> </Menu.Item>
                 <Menu.Item key="8"> <a href="/list-filter/difficulty/normal">Normal</a></Menu.Item>
                 <Menu.Item key="9"><a href="/list-filter/difficulty/Alta">Alta</a></Menu.Item>
               </SubMenu>
 
-              <SubMenu key="sub1" icon={<UserOutlined />} title="Categorias">
+              <SubMenu key="sub1" icon={<UserOutlined />} title="Categorías">
 
                 {this.state.data.map(tag => (
                   <Menu.Item key={tag.name}>

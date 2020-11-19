@@ -4,6 +4,7 @@ import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { PDFDownloadLink} from '@react-pdf/renderer'
 
 
+import { PageHeader, Button, Descriptions } from 'antd';
 
 
 const styles = StyleSheet.create({
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const a= [{"name": "test"}, {"name": "Test"}, {"name": "Graph"}, {"name": "Math"}]
+
 function MyDoc (props){
 console.log(props)
   return (
@@ -76,9 +77,9 @@ console.log(props)
       </Text>
       
       <Text style={styles.text}>{
-        (props.data.tests)? (props.data.tests.map(testscases => (
-         `Input: \n ${testscases.input_data} \n
-          Output  \n ${testscases.output_data} \n
+        (props.data.tests)? (props.data.tests.map((testscases, index) => (
+         `Input ${index+1} :\n  \n ${testscases.input_data} \n
+          Output ${index+1 }:\n  \n ${testscases.output_data} \n
          ` 
             
         )) ) :null}
@@ -94,9 +95,11 @@ console.log(props)
 
 function PdfMake(props){
     return (
-      <PDFDownloadLink document={<MyDoc data={props.data}/>} fileName={props.data.title+".pdf"}>
-      {({ blob, url, loading, error }) => (loading ? 'Cargando documento...' : 'Descargar!')}
+     
+      <PDFDownloadLink  document={<MyDoc data={props.data}/>} fileName={props.data.title+".pdf"}>
+      {({ blob, url, loading, error }) => (loading ? 'Cargando documento...' :<Button key="1" type="primary" > Descargar Problema</Button>)}
     </PDFDownloadLink>
+    
     );
 }
 

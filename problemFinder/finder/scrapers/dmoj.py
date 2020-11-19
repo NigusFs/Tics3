@@ -42,8 +42,17 @@ def extract_problem(code) -> Problem:
 	enunciado=extract_enunciado(contenido_raw,many_test_cases)
 	dificultad = extract_dificultad(code)	
 	
-	time.sleep(1)
-	
+	time.sleep(1.5)
+	#print(Problem(titulo,enunciado,dificultad,"DMOJ",test_case,categoria))
+	# print("titulo: ", titulo)
+	# print("content: " ,enunciado)
+	# print("dificultad: ", dificultad)
+	# print("source: ","DMOJ")
+	# for i in test_case:
+	# 	print ("test_case input: ", i.test_input)
+	# 	print ("test_case output: ", i.output)
+	# print("testascases input: ", test_case)
+	# print("categoria: ",categoria)]
 	return Problem(titulo,enunciado,dificultad,"DMOJ",test_case,categoria)
 
 
@@ -86,11 +95,11 @@ def extract_dificultad(code):
 	points_problem = requests.get("https://dmoj.ca/api/v2/problem/{}".format(code)).json()['data']['object']['points']
 
 	if  points_problem >40:
-		dificultad="Dificil"
+		dificultad="hard"
 	elif points_problem >20:
-		dificultad="Medio"
+		dificultad="medium"
 	else:
-		dificultad="Facil"
+		dificultad="easy"
 	return dificultad
 
 def main():
