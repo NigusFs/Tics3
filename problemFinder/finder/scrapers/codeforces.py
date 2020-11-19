@@ -12,10 +12,10 @@ logger = logging.getLogger(__name__)
 
 def _get_difficulty(rating: int):
     if rating < 1400:
-        return "easy"
+        return "Facil"
     elif rating < 1800:
-        return "medium"
-    return "hard"
+        return "Medio"
+    return "Dificil"
 
 def get_problems_url_by_topic(topic):
     url = f"http://codeforces.com/problemset?tags={topic}"
