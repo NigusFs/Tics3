@@ -55,7 +55,10 @@ def codechef(difficulty, start, quantity):
         aux = table[i].td.div.a['href']
         url_aux = url + aux
         res = requests.get(url_aux)
-        
+    #    try:
+    #     response = request.urlopen(url)
+    #    except error.HTTPError as err:
+    #     logger.info("Found and error trying to open URL:%s %s"%(url, err))
         if res.status_code ==  200:
             if res.json()['status'] == 'error': continue   
             if Parser(res.json(),difficulty) == None: continue      

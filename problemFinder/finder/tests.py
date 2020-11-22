@@ -2,6 +2,36 @@ from django.test import TestCase as DjangoTestCase
 
 from .models import Problem, Category
 
+class ProblemsViewTestCase(DjangoTestCase):
+    def _build_problem(self, title="Some Title", content="some content",  difficulty="hard", category="default"):
+        problem = Problem.objects.create(
+            title=title, 
+            content=content,
+            difficulty=difficulty,
+            source="somepage.com/problem"
+        )
+        problem.categories.add(Category.objects.create(name=category))
+        return problem
+
+    def test_get_problem(self):
+        problem = self._build_problem("Title 1", content="content 1", difficulty="easy", category="array")
+        response = self.client.get('/finder/problem/' + str(problem.id))
+
+        self.assertEqual(response.status_code, 200)
+        response_data = response.json()
+        self.assertEqual(response_data['title'], problem.title)
+        self.assertEqual(response_data['content'], problem.content)
+        self.assertEqual(response_data['difficulty'], problem.difficulty)
+        array_count = 0
+        for problem_category in response_data["categories"]:
+            if problem_category["name"] == "array":
+                array_count += 1
+        # comparar que solo exista una categoria y que esta sea "array"
+        self.assertEqual(len(response_data["categories"]),1)
+        self.assertEqual(array_count,1)
+
+
+
 class FilterViewTestCase(DjangoTestCase):
     def _build_problem(self, category="default", difficulty="hard"):
         problem = Problem.objects.create(
