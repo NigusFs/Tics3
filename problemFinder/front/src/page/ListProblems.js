@@ -2,16 +2,27 @@ import React from 'react';
 import './ListProblems.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+<<<<<<< HEAD
 
 import Table from '../components/Table';
 
+=======
+import {useEffect, useState} from 'react';
+
+import Table from '../components/Table';
+import Navbar from '../components/Navbar';
+>>>>>>> 537de7bc1d9307bb872683a3e70cf5c51f8170f1
 import Sidebar from '../components/Sidebar';
 
 import 'antd/dist/antd.css'
 import { Layout } from 'antd';
 
 
+<<<<<<< HEAD
 const {  Content,  Sider } = Layout;
+=======
+const { Header, Content, Footer, Sider } = Layout;
+>>>>>>> 537de7bc1d9307bb872683a3e70cf5c51f8170f1
 
 
 //este puede ser el index basico que tenga la barra de navegacion y el foot // 30 es para colocar el buscador
@@ -31,7 +42,11 @@ class ListProblems extends React.Component {
 
   render() {
 
+<<<<<<< HEAD
     
+=======
+    const aux ={sa: "asdad" };
+>>>>>>> 537de7bc1d9307bb872683a3e70cf5c51f8170f1
     return (
       
 

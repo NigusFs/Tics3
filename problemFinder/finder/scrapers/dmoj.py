@@ -102,7 +102,3 @@ def extract_dificultad(code):
 		dificultad="Facil"
 	return dificultad
 
-	return Problem(titulo,enunciado,dificultad,"DMOJ",test_case,categoria)
-	
-#number_pages=0.1
-#print(extract_many(number_pages))
