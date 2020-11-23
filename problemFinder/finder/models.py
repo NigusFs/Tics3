@@ -24,4 +24,5 @@ class Category(models.Model):
 
 
 class JudgesDaemon(models.Model):
-    codeforces_last_page = models.IntegerField(default=1)
+    judge_name = models.CharField(max_length=100)
+    last_page = models.IntegerField(default=0)

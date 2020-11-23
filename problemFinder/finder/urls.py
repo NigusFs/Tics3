@@ -9,4 +9,7 @@ urlpatterns = [
     path('filter/difficulty/<str:difficulty>', views.FilterByDifficultyView.as_view(), name='filter_problems_by_difficulty'),
     path('problems', views.ListProblems.as_view(), name='list_problems'),
     path('categories', views.ListCategories.as_view(), name='list_categories'),
+    path('user/', views.user_create_view, name='user_create'),
+    path('user/login/', views.login_view, name='user_login'),
+    path('user/logout/', views.logout_view, name='user_logout')
 ]
