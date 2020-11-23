@@ -10,8 +10,8 @@ import Sidebar from '../components/Sidebar';
 import 'antd/dist/antd.css'
 import { Layout } from 'antd';
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-const { Header, Content, Footer, Sider } = Layout;
+
+const { Content,Sider } = Layout;
 
 
 //este puede ser el index basico que tenga la barra de navegacion y el foot // 30 es para colocar el buscador

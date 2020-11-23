@@ -6,19 +6,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Table, Tag} from 'antd';
 
 
-function ViewProblem  (pk) {
-
-    console.log(pk);
-}
-       
+ 
 
 function TableProblems(props) {
 
-  const list_category = () =>{
-    //aca debe exitir un arreglo que guarde todos las categorias de cada problema (una sola vez, ya que estos se repiten)
-    // hacer una llamada al back para obtener todas las categorias izi
-  }
-
+ 
   const columns =[
     {
       title: "Título",

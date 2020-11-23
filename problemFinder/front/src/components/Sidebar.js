@@ -1,12 +1,10 @@
 import { Layout, Menu } from 'antd';
 import React from 'react';
 import {
-    FileOutlined,
     TeamOutlined,
     UserOutlined,
   } from '@ant-design/icons';
   
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const { SubMenu } = Menu;
 

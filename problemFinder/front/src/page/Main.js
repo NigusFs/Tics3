@@ -6,7 +6,7 @@ import NavBarr from "../components/Navbar";
 function Main () {
     return (
         
-        <div>
+        <div id="root">
             <NavBarr/>  
         </div>
        

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, Document, StyleSheet } from '@react-pdf/renderer';
 import { PDFDownloadLink} from '@react-pdf/renderer'
 
 
-import { PageHeader, Button, Descriptions } from 'antd';
+import {Button} from 'antd';
 
 
 const styles = StyleSheet.create({
