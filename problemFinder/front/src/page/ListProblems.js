@@ -42,11 +42,7 @@ class ListProblems extends React.Component {
 
   render() {
 
-<<<<<<< HEAD
     
-=======
-    const aux ={sa: "asdad" };
->>>>>>> 537de7bc1d9307bb872683a3e70cf5c51f8170f1
     return (
       
 
