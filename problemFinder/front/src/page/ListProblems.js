@@ -14,7 +14,6 @@ import { Layout } from 'antd';
 const {  Content,  Sider } = Layout;
 
 
-//este puede ser el index basico que tenga la barra de navegacion y el foot // 30 es para colocar el buscador
 class ListProblems extends React.Component {
   constructor(props){
     super(props);

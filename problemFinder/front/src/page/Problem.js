@@ -38,17 +38,16 @@ function Problem ({match}){
       useEffect(() => {
         fetchTable();
       }, []);
-
-  var newtext = (data_problem.content)?(data_problem.content.split('\n').map(str => <Paragraph>{str}</Paragraph>)):null;
-  console.log(data_problem)
+  
         return(
-      <div>
+      
         
          
-          <div className="site-page-header-ghost-wrapper">
+        <div className="site-page-header-ghost-wrapper">
     <PageHeader
       ghost={false}
       onBack={() => window.history.back()}
+      
       title= { <Title level={2}> {data_problem.title}</Title>}
       subTitle ={data_problem.difficulty}
       
@@ -67,35 +66,29 @@ function Problem ({match}){
         <PdfMake data={data_problem}/>
       ]}
     >
-      <Paragraph>
-      {newtext}
-     </Paragraph>
-     <Paragraph>
-      <Title level={3}> Testcases</Title>
-     
-      
-      { (data_problem.tests)?
-        (data_problem.tests.map((tests,index) => (
-            <div>
-              <Collapse>
-              <Panel header="Input" key={index}>{tests.input_data.split('\n').map(str => <Paragraph>{str}</Paragraph>)}</Panel>
-              <Panel header="Output" key={index}>{tests.output_data.split('\n').map(str => <Paragraph>{str}</Paragraph>)}</Panel>
-                            
-            </Collapse>
-            </div>
-            )))
+        <Paragraph>
+             {(data_problem.content)?(data_problem.content.split('\n').map(content => <Paragraph>{content}</Paragraph>)):null}
+        </Paragraph>
+        <Paragraph>
+              <Title level={3}> Testcases</Title>
+            
+              { (data_problem.tests)?
+                (data_problem.tests.map((tests,index) => (
+                    <div>
+                      <Collapse>
+                        <Panel header="Input" key={index}>{tests.input_data.split('\n').map(input => <Paragraph>{input}</Paragraph>)}</Panel>
+                        <Panel header="Output" key={index}>{tests.output_data.split('\n').map(output => <Paragraph>{output}</Paragraph>)}</Panel>           
+                      </Collapse>
+                    </div>
+                    )))
+                    :null}
 
-        :null}
-        
-              
-          
-     
-     </Paragraph>
+        </Paragraph>
     
     </PageHeader>
-  </div>,
+  </div>
        
-          </div > 
+         
               
         
          
