@@ -1,9 +1,16 @@
 from django.http import JsonResponse, QueryDict
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.views import View
 
 from .models import Problem, TestCase, Category
-from .serializers import ProblemSerializer
+from .serializers import (
+    CategorySerializer,
+    ProblemSerializer,
+    UserSerializer,
+)
 
 class ProblemView(View):
     def get(self, request, problem_id):
@@ -47,4 +54,53 @@ class FilterByDifficultyView(View):
         problems_serializer = ProblemSerializer(problems, many=True)
         return JsonResponse(problems_serializer.data, safe=False, status=200)
 
+class ListProblems(View): 
+    def get(self, request):
+        list_problems = Problem.objects.all()
+        problems_serializer = ProblemSerializer(list_problems, many=True)
+        return JsonResponse(problems_serializer.data, safe=False, status=200)
 
+def user_create_view(request):
+    if request.method == 'POST':
+        user_serializer = UserSerializer(data=request.POST)
+        if user_serializer.is_valid():
+            User.objects.create_user(
+                username = request.POST['username'],
+                password = request.POST['password'],
+                email = request.POST['email']
+            )
+            return JsonResponse({
+                'description': 'User created successfully !'
+            }, status=201)
+        else:
+            return JsonResponse(user_serializer.errors, status=400)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return JsonResponse({
+                    'description': 'Succesfully Logged in ! :)'
+                }, status=200)
+        else:
+            return JsonResponse(form.errors, status=400)
+        return JsonResponse({'description': 'Could not Log in :('}, status=404)
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({
+        'description': 'Succesfully Logged out ! :)'
+    }, status=200)
+
+
+class ListCategories(View): 
+    def get(self, request):
+        list_categories = Category.objects.all()
+        category_serializer = CategorySerializer(list_categories, many=True)
+        return JsonResponse(category_serializer.data, safe=False, status=200)

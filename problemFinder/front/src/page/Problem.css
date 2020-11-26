@@ -1,0 +1,23 @@
+
+.center-nose{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  margin-top: 0.5% ;
+  
+}
+
+.algo{
+  display: flex;
+   flex-direction: row;
+   justify-content: flex-end;
+   margin-top: 2% ;
+   margin-right: 25%;
+   
+}
+
+.site-page-header-ghost-wrapper {
+  background-color: #f5f5f5;
+  padding: 24px;
+}

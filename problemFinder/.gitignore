@@ -4,6 +4,7 @@
 *.pyc
 __pycache__/
 local_settings.py
+finder/migrations/
 
 # DB
 db.sqlite3
@@ -12,3 +13,15 @@ db.sqlite3-journal
 # env
 .env
 myproject.egg-info
+
+#front 
+node_modules/
+*.lock
+
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg  # comment out if you don't need vector files
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
