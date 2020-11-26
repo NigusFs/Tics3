@@ -32,4 +32,6 @@ def start_scrapers():
                     name=category
                 )
                 new_problem.categories.add(new_problem_category)
-
+            # log the amount of new problems added
+        judge.last_page = judge.last_page+1
+        judge.save()
