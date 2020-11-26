@@ -26,3 +26,4 @@ class Category(models.Model):
 class JudgesDaemon(models.Model):
     judge_name = models.CharField(max_length=100)
     last_page = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=20)

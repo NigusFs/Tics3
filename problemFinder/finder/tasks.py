@@ -9,7 +9,7 @@ def start_scrapers():
         if judge.name == "codeforces":
             problems = get_problems_by_page_number(judge.last_page+1)
         elif judge.name == "dmoj":
-            problems = extract_many(1) # fix this value
+            problems = extract_many(judge.last_page + 1) # fix this value
         elif judge.name == "codechef":
             problems = codechef(judge.difficulty, judge.last_page+1, judge.quantity)
         for problem in problems:

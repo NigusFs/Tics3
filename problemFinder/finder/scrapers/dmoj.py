@@ -45,16 +45,6 @@ def extract_problem(code) -> Problem:
 	dificultad = extract_dificultad(code)	
 	
 	time.sleep(1.5)
-	#print(Problem(titulo,enunciado,dificultad,"DMOJ",test_case,categoria))
-	#print("titulo: ", titulo)
-	#print("content: " ,contenido_raw)
-	# print("dificultad: ", dificultad)
-	# print("source: ","DMOJ")
-	# for i in test_case:
-	# 	print ("test_case input: ", i.test_input)
-	# 	print ("test_case output: ", i.output)
-	# print("testascases input: ", test_case)
-	# print("categoria: ",categoria)]
 	return Problem(titulo,enunciado,dificultad,"DMOJ",test_case,categoria)
 
 
