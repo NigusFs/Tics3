@@ -11,7 +11,7 @@ import { Collapse } from 'antd';
 import PdfMake from '../components/PdfMake';
 import { Tag } from 'antd';
 import { Typography } from 'antd';
-
+import ModalLogin from '../components/ModalLogin';
 
 const { Title, Paragraph  } = Typography;
 
@@ -22,7 +22,7 @@ const { Panel } = Collapse;
 
 function Problem ({match}){
   const [data_problem, setData] = useState([]);
-  var auth1=false;
+  var auth1=true;
 
   
   const fetchTable = () => {
@@ -38,7 +38,8 @@ function Problem ({match}){
       useEffect(() => {
         fetchTable();
       }, []);
-  
+      
+      console.log(data_problem.title)
         return(
       
         
@@ -61,8 +62,9 @@ function Problem ({match}){
         :null}
 
       extra={
-        [(auth1)?(<Button danger>Eliminar</Button>):<Button danger disabled>Eliminar</Button>, 
-        <Button key="2">Editar</Button>,
+        [
+        <ModalLogin id_problem={data_problem.pk} title_problem={data_problem.title} />,
+        (auth1)?(<Button key="2">Editar</Button>):<Button key="2" disabled>Editar</Button>,      
         <PdfMake data={data_problem}/>
       ]}
     >
@@ -76,8 +78,8 @@ function Problem ({match}){
                 (data_problem.tests.map((tests,index) => (
                     <div>
                       <Collapse>
-                        <Panel header="Input" key={index}>{tests.input_data.split('\n').map(input => <Paragraph>{input}</Paragraph>)}</Panel>
-                        <Panel header="Output" key={index}>{tests.output_data.split('\n').map(output => <Paragraph>{output}</Paragraph>)}</Panel>           
+                        <Panel header={"Input "+index} key={index}>{tests.input_data.split('\n').map(input => <Paragraph>{input}</Paragraph>)}</Panel>
+                        <Panel header={"Output "+index} key={index}>{tests.output_data.split('\n').map(output => <Paragraph>{output}</Paragraph>)}</Panel>           
                       </Collapse>
                     </div>
                     )))

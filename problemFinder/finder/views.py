@@ -1,12 +1,17 @@
 from django.http import JsonResponse, QueryDict
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+<<<<<<< HEAD
 from django.contrib.auth.models import User, Group
+=======
+from django.contrib.auth.models import User
+>>>>>>> add delete problem with authentification and change testcase scrapper of dmoj
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.views.decorators.http import require_http_methods
 
 from .models import Problem, TestCase, Category
+<<<<<<< HEAD
 from .tasks import start_scrapers
 from .serializers import (
     CategorySerializer,
@@ -16,8 +21,20 @@ from .serializers import (
 
 def user_is_admin(user):
     return user.groups.filter(name='admin').exists()
+=======
+from .serializers import ProblemSerializer
+from .serializers import CategorySerializer
+from .serializers import ProblemSerializer, UserSerializer
+
+from rest_framework import status
+
+#borrar esto- es inseguro
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+>>>>>>> add delete problem with authentification and change testcase scrapper of dmoj
 
 class ProblemView(View):
+    
     def get(self, request, problem_id):
         problem = get_object_or_404(Problem, pk=problem_id)
         problem_serializer = ProblemSerializer(problem)
@@ -39,7 +56,8 @@ class ProblemView(View):
             return JsonResponse(problem_serializer.data, status=200)
         else:
             return JsonResponse(problem_serializer.errors, status=400)
-    
+
+    @method_decorator(csrf_exempt)
     def delete(self, request, problem_id):
         problem = get_object_or_404(Problem, pk=problem_id)
         problem.delete()

@@ -34,7 +34,7 @@ class SideBar extends React.Component {
         <Layout>
           
             <div className="logo" />
-            <Menu theme="dark"  mode="inline" defaultOpenKeys={['sub2','sub1']}>
+            <Menu theme="dark"  mode="inline" defaultOpenKeys={['sub2']}>
 
               {/*<Menu.Item key="10" icon={<FileOutlined />}>
                 <Link to ="/">Descargar</Link> 
