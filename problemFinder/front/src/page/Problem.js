@@ -12,6 +12,7 @@ import PdfMake from '../components/PdfMake';
 import { Tag } from 'antd';
 import { Typography } from 'antd';
 import ModalLogin from '../components/ModalLogin';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const { Title, Paragraph  } = Typography;
 
@@ -22,7 +23,7 @@ const { Panel } = Collapse;
 
 function Problem ({match}){
   const [data_problem, setData] = useState([]);
-  var auth1=true;
+
 
   
   const fetchTable = () => {
@@ -64,7 +65,7 @@ function Problem ({match}){
       extra={
         [
         <ModalLogin id_problem={data_problem.pk} title_problem={data_problem.title} />,
-        (auth1)?(<Button key="2">Editar</Button>):<Button key="2" disabled>Editar</Button>,      
+        <Link to={'/Edit/Problem/'+data_problem.pk}> <Button key="2">Editar</Button> </Link>,     
         <PdfMake data={data_problem}/>
       ]}
     >

@@ -27,7 +27,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     <Modal
       visible={visible}
       title="Autentificacion"
-      okText="Eliminar"
+      okText="Editar"
       cancelText="Cancelar"
       onCancel={onCancel}
       onOk={() => {
@@ -76,13 +76,19 @@ function ModalLogin (props) {
   
 
   Cookies.set('foo', 'bar')
-  console.log(Cookies.get("foo"))
+  //console.log(Cookies.get("foo"))
   
-  const onCreate = values => {
+  const onCreate = (values) => {
 
     const formData= new FormData();
     formData.append('username', values.username);
     formData.append('password', values.password);
+    const formProblem=new FormData();
+    formProblem.append('title', props.edit_problem.Titulo);
+    formProblem.append('categories', props.edit_problem.Categoria);
+    formProblem.append('difficulty', props.edit_problem.Dificultad);
+    formProblem.append('content', props.edit_problem.Enunciado);
+    formProblem.append('tests', []);
 //colocar un if si se esta editando o elimando para usar el mismo codigo
     
 
@@ -95,17 +101,17 @@ function ModalLogin (props) {
     .then((response) => {
       if(response.status === 200) {
 
-        fetch(`http://127.0.0.1:8000/finder/delete/problem/${props.id_problem}`,{
-        method: 'DELETE',
-      
+        fetch(`http://127.0.0.1:8000/finder/edit/problem/${props.id_problem}`,{
+        method: 'PUT',
+        body : formProblem
       }).then((response)=>{
 
         if (response.status == 200){
-          message.success(`Se elimino el problema "${props.title_problem}"`,7);
+          message.success(`Se modifico el problema "${props.title_problem}"`,7);
           
           setTimeout(()=>{window.history.back();},1500);
       }else{
-        message.error(`No se pudo eliminar el problema  "${props.title_problem}" `, 5);
+        message.error(`No se pudo modificar el problema  "${props.title_problem}" `, 5);
         
       }
       
@@ -126,12 +132,12 @@ function ModalLogin (props) {
 
   return (
     <a>
-      <Button danger 
+      <Button type="primary"   htmlType="button"
         onClick={() => {
           setVisible(true);
         }}
       >
-        Eliminar
+        Editar
       </Button>
       <CollectionCreateForm
       

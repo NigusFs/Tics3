@@ -14,7 +14,7 @@ def extract_many(page=1) -> List[Problem] :
 	table_problems = str(soup.find("table"))
 	list_code_problems=re.findall(r'\/problem\/([a-z A-Z 0-9]+)\"',table_problems)
 
-	return [extract_problem(code_problem) for code_problem in list_code_problems ]
+	return [print(extract_problem(code_problem)) for code_problem in list_code_problems ]
 
 def extract_problem(code) -> Problem:
 	url = 'https://dmoj.ca/problem/{}'.format(code)
@@ -81,4 +81,4 @@ def extract_dificultad(code):
 	return dificultad
 
 
-print(extract_problem("bohemianrhaksody"))
+print(extract_many())
