@@ -1,4 +1,5 @@
 from django.test import TestCase as DjangoTestCase
+from django.contrib.auth.models import User, Group
 
 from .models import Problem, Category
 
@@ -51,3 +52,35 @@ class FilterViewTestCase(DjangoTestCase):
         response = self.client.get("/finder/filter/difficulty/not_existant_difficulty")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), [])
+
+class ProblemsTestCase(DjangoTestCase):
+    def setUp(self):
+        self.usr = User.objects.create_user(username="test", email="test@test.com", password="test")
+        self.admin_group = Group.objects.create(name="admin")
+        self.usr.groups.add(self.admin_group)
+
+    def test_create_problem_without_login(self):
+        response = self.client.post("/finder/problem/", {
+            "title": "Problem 1",
+            "content": "lorem ipsum dolor",
+            "difficulty": "hard",
+            "tests": [{"input_data": "123", "output_data": "1"}],
+            "categories": ["DP", "Graphs"]
+        })
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(Problem.objects.all().count(), 0)
+    
+    def test_create_problem_when_logged_in(self):
+        self.client.login(username="test", password="test")
+        # self.client.post("/finder/user/login", {"username": "test", "password": "test"})
+        response = self.client.post("/finder/problem/", {
+            "title": "Problem 1",
+            "content": "lorem ipsum dolor",
+            "difficulty": "hard",
+            "tests": [{"input_data": "123", "output_data": "1"}],
+            "categories": [{"name": "DP"}, {"name": "Graphs"}]
+        })
+        print(response.json())
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Problem.objects.all().count(), 1)
+    
