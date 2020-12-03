@@ -7,8 +7,6 @@ import { Table, Tag} from 'antd';
 
 
  
- 
- 
 
 function TableProblems(props) {
 
@@ -24,7 +22,6 @@ function TableProblems(props) {
     {
       title: "Categoría",
       dataIndex: "categories",
-      
       render: categories => (
         <>
           {categories.map(tag => (
