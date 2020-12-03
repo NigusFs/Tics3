@@ -29,7 +29,8 @@ function TableProblems(props) {
         <>
           {categories.map(tag => (
             <Tag color="blue" key={tag.name}>
-              {tag.name}
+              <a href={"/list-filter/category/" + tag.name}>{tag.name}</a>
+             
             </Tag>
           ))}
         </>

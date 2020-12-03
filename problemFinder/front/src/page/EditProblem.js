@@ -5,6 +5,7 @@ import { Typography } from "antd";
 import { PageHeader } from 'antd';
 import ModalLoginEdit from '../components/ModalLoginEdit';
 import { Popconfirm } from 'antd';
+import { message} from 'antd';
 
 const { TextArea } = Input;
 
@@ -26,6 +27,10 @@ const tailLayout = {
     span: 16,
   },
 };
+
+
+
+
 
 function EditProblem ({match}){
   const [form] = Form.useForm();
@@ -56,30 +61,49 @@ function EditProblem ({match}){
 
   const onFinish = (values) => {
     aux2=values;
+
     const aas=23;
-    const formProblem=new FormData();
-    console.log(values.Dificultad)
+    var formBody = [];
+    for (var property in values) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(values[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    /*const formProblem=new FormData();
+    console.log(values.Enunciado)
+    
     formProblem.append('title', values.Titulo);
     formProblem.append('categories', values.Categoria);
     formProblem.append('difficulty', values.Dificultad);
     formProblem.append('content', values.Enunciado);
+    *
     //colocar un append a un arreglo que tenga todos los input y out separados por testcase
     formProblem.append('tests', []);
+    
     //console.log(aux)
     //console.log(values.Categoria)
     if (JSON.stringify(aux)!==JSON.stringify(values.Categoria)){
       values.Categoria=values.Categoria.split(",")
     console.log("si")
   }
-
-  fetch(`http://127.0.0.1:8000/finder/edit/problem/${data_problem.pk}`,{
+*/
+  fetch(`http://127.0.0.1:8000/finder/problem/${data_problem.pk}`,{
     method: 'PUT',
-    body : formProblem
+    headers: {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  },
+  body: formBody
+
   }).then((response)=>{
 
-    if (response.status == 200){
-      //message.success(`Se modifico el problema "${data_problem.title}"`,7);
-      console.log("no")
+    if (response.status === 200){
+      
+      
+      message.success(`Se edito el problema "${data_problem.title}"`,7);
+          
+      setTimeout(()=>{window.history.back();},1500);
      // setTimeout(()=>{window.history.back();},1500);
   }else{
     console.log("")
@@ -90,8 +114,9 @@ function EditProblem ({match}){
   })
 
 
-    console.log(values);
-    console.log(values.Titulo);
+    //console.log(values);
+    //console.log(formProblem)
+   
   };
 
   const onReset = () => {
@@ -106,17 +131,17 @@ function EditProblem ({match}){
     )))
    }
     form.setFieldsValue({
-      Titulo: data_problem.title,
-      Categoria: (data_problem.categories)?
+      title: data_problem.title,
+      categories: (data_problem.categories)?
       (data_problem.categories.map(tag => (
          
             tag.name
           )))
 
       :null,
-      Dificultad: data_problem.difficulty,
-      Enunciado: data_problem.content,
-      Tests_in: (data_problem.tests)?
+      difficulty: data_problem.difficulty,
+      content: data_problem.content,
+      tests_in: (data_problem.tests)?
       (data_problem.tests.map(test => (
          
              test.input_data
@@ -150,7 +175,7 @@ function EditProblem ({match}){
     
     <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
       <Form.Item
-        name="Titulo"
+        name="title"
         label={  <PageHeader
           className="site-page-header"
           title={<Title level={3}>Titulo</Title>}
@@ -169,8 +194,8 @@ function EditProblem ({match}){
         />
       </Form.Item>
 
-      <Form.Item
-        name="Categoria"
+      {/*<Form.Item
+        name="category"
         label={  <PageHeader
           className="Categoria"
           title={<Title level={3}>Categoria</Title>}
@@ -182,10 +207,10 @@ function EditProblem ({match}){
           placeholder="Inserte  Categorias"
           autoSize
         />
-      </Form.Item>
+        </Form.Item>*/}
       
       <Form.Item
-        name="Dificultad"
+        name="difficulty"
         label={  <PageHeader
           className="site-page-header"
           title={<Title level={3}>Dificultad</Title>}
@@ -199,7 +224,7 @@ function EditProblem ({match}){
         />
       </Form.Item>
       <Form.Item
-        name="Enunciado"
+        name="content"
         label={  <PageHeader
           className="site-page-header"
           title={<Title level={3}>Enunciado</Title>}/>}

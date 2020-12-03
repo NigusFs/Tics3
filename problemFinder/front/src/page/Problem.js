@@ -50,17 +50,10 @@ function Problem ({match}){
       ghost={false}
       onBack={() => window.history.back()}
       
-      title= { <Title level={2}> {data_problem.title}</Title>}
+      title= { <Title  style={{  display: 'flex' }}  level={2}> {data_problem.title}</Title>}
       subTitle ={data_problem.difficulty}
       
-      tags={
-        (data_problem.categories)?
-        (data_problem.categories.map(tag => (
-            <Tag color="blue" key={tag.name}>
-              {tag.name}
-            </Tag>)))
-
-        :null}
+      
 
       extra={
         [
@@ -69,6 +62,15 @@ function Problem ({match}){
         <PdfMake data={data_problem}/>
       ]}
     >
+      {(data_problem.categories)?
+        (data_problem.categories.map(tag => (
+           <Tag color="blue" key={tag.name}>
+              <a href={`/list-filter/category/${tag.name}`}> {tag.name}</a>
+            </Tag>   )))
+
+        :null}
+        <Paragraph>{"\n \n"}{"\n \n"}</Paragraph>
+        
         <Paragraph>
              {(data_problem.content)?(data_problem.content.split('\n').map(content => <Paragraph>{content}</Paragraph>)):null}
         </Paragraph>

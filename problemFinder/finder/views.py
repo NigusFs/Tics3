@@ -17,15 +17,20 @@ from .serializers import (
 def user_is_admin(user):
     return user.groups.filter(name='admin').exists()
 
+def user_is_admin(user):
+    return user.groups.filter(name='admin').exists()
+
 class ProblemView(View):
-    
     def get(self, request, problem_id):
         problem = get_object_or_404(Problem, pk=problem_id)
         problem_serializer = ProblemSerializer(problem)
         return JsonResponse(problem_serializer.data, status=200)
 
     def post(self, request):
+        # if not user_is_admin(request.user):
+        #     return JsonResponse({"description": "You do not have access"}, status=403)
         problem_serializer = ProblemSerializer(data=request.POST)
+        print(dict(request.POST))
         if problem_serializer.is_valid():
             problem_serializer.save()
             return JsonResponse(problem_serializer.data, status=201)
@@ -40,8 +45,7 @@ class ProblemView(View):
             return JsonResponse(problem_serializer.data, status=200)
         else:
             return JsonResponse(problem_serializer.errors, status=400)
-
-    @method_decorator(csrf_exempt)
+    
     def delete(self, request, problem_id):
         problem = get_object_or_404(Problem, pk=problem_id)
         problem.delete()

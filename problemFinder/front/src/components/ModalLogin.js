@@ -6,7 +6,7 @@ import { message, Space } from 'antd';
 
 interface Values {
   user: string;
-  password: string;
+  password: string; 
 }
 
 interface CollectionCreateFormProps {
@@ -74,10 +74,6 @@ function ModalLogin (props) {
   const [visible, setVisible] = useState(false);
   const [postId, setPostId] = useState(null);
   
-
-  Cookies.set('foo', 'bar')
-  console.log(Cookies.get("foo"))
-  
   const onCreate = values => {
 
     const formData= new FormData();
@@ -95,7 +91,7 @@ function ModalLogin (props) {
     .then((response) => {
       if(response.status === 200) {
 
-        fetch(`http://127.0.0.1:8000/finder/delete/problem/${props.id_problem}`,{
+        fetch(`http://127.0.0.1:8000/finder/problem/${props.id_problem}`,{
         method: 'DELETE',
       
       }).then((response)=>{
