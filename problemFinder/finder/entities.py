@@ -3,8 +3,8 @@ from typing import List
 
 @dataclass
 class TestCase:
-    test_input: str
-    output: str
+    input_data: str
+    output_data: str
 
 
 @dataclass

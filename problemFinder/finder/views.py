@@ -7,6 +7,7 @@ from django.views import View
 from django.views.decorators.http import require_http_methods
 
 from .models import Problem, TestCase, Category
+from .tasks import start_scrapers
 from .serializers import (
     CategorySerializer,
     ProblemSerializer,
@@ -23,10 +24,7 @@ class ProblemView(View):
         return JsonResponse(problem_serializer.data, status=200)
 
     def post(self, request):
-        # if not user_is_admin(request.user):
-        #     return JsonResponse({"description": "You do not have access"}, status=403)
         problem_serializer = ProblemSerializer(data=request.POST)
-        print(dict(request.POST))
         if problem_serializer.is_valid():
             problem_serializer.save()
             return JsonResponse(problem_serializer.data, status=201)
@@ -110,3 +108,10 @@ class ListCategories(View):
         list_categories = Category.objects.all()
         category_serializer = CategorySerializer(list_categories, many=True)
         return JsonResponse(category_serializer.data, safe=False, status=200)
+
+@require_http_methods(["POST"])
+def start_daemon(request):
+    start_scrapers()
+    return JsonResponse({
+        'description': 'Finished ! :)'
+    }, status=200)
