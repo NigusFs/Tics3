@@ -2,16 +2,16 @@ from django.db import models
 
 
 class Problem(models.Model):
-    title = models.CharField(max_length=25)
-    content = models.CharField(max_length=1000)
+    title = models.CharField(max_length=50)
+    content = models.CharField(max_length=20000)
     difficulty = models.CharField(max_length=15)
     source = models.CharField(max_length=200)
 
 
 class TestCase(models.Model):
     problem = models.ForeignKey(Problem, related_name="tests", on_delete=models.CASCADE)
-    input_data = models.CharField(max_length=1000)
-    output_data = models.CharField(max_length=1000)
+    input_data = models.CharField(max_length=2000)
+    output_data = models.CharField(max_length=2000)
 
 
 class Category(models.Model):
