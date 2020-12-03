@@ -47,10 +47,11 @@ function Problem ({match}){
          
         <div className="site-page-header-ghost-wrapper">
     <PageHeader
+      
       ghost={false}
       onBack={() => window.history.back()}
       
-      title= { <Title  style={{  display: 'flex' }}  level={2}> {data_problem.title}</Title>}
+      title= { <Title    level={2}> {data_problem.title}</Title>}
       subTitle ={data_problem.difficulty}
       
       
