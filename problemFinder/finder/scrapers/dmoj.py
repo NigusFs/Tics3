@@ -14,7 +14,7 @@ def extract_many(page=1) -> List[Problem] :
 	table_problems = str(soup.find("table"))
 	list_code_problems=re.findall(r'\/problem\/([a-z A-Z 0-9]+)\"',table_problems)
 
-	return [print(extract_problem(code_problem)) for code_problem in list_code_problems ]
+	return [extract_problem(code_problem) for code_problem in list_code_problems ]
 
 def extract_problem(code) -> Problem:
 	url = 'https://dmoj.ca/problem/{}'.format(code)
@@ -40,13 +40,13 @@ def extract_testcase(contenido_raw):
 	if  re.search(r'Sample Input\n(.+?)Sample Output',contenido_raw,re.DOTALL) != None:
 		many_test_cases = False
 		input_sample_case =  re.search(r'Sample Input\n(.+?)Sample Output',contenido_raw,re.DOTALL)[1].strip()
-		output_sample_case =  re.search(r'\nSample Output\n(.+?)\n(Explanation|\n|Sample Explanation|Judge)',contenido_raw,re.DOTALL)[1].strip()
+		output_sample_case =  re.search(r'\nSample Output\n(.+?)\n(Explanation|\n)',contenido_raw,re.DOTALL)[1].strip()
 		test_case.append(TestCase(input_sample_case,output_sample_case))
 
 	elif re.findall(r'Sample Input \d(.+?)Sample Output',contenido_raw,re.DOTALL) != None :
 		many_test_cases = True
 		input_sample_case =  re.findall(r'Sample Input \d(.+?)Sample Output',contenido_raw,re.DOTALL)
-		output_sample_case = re.findall(r'\nSample Output \d(.+?)\n(Sample Input \d|\n|Explanation|Sample Explanation|Judge )',contenido_raw,re.DOTALL)
+		output_sample_case = re.findall(r'\nSample Output \d(.+?)\n(Sample Input \d|\n|Explanation|Sample Explanation )',contenido_raw,re.DOTALL)
 		
 		for i in range(len(input_sample_case)):
 			t1=TestCase(input_sample_case[i].strip(),output_sample_case[i][0])
@@ -80,5 +80,3 @@ def extract_dificultad(code):
 		dificultad="Facil"
 	return dificultad
 
-
-print(extract_many())

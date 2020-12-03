@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 from django.contrib.auth.models import User
 from rest_framework import serializers
-=======
->>>>>>> tag clickeables
 from django.contrib.auth.models import User
 from rest_framework import serializers
 

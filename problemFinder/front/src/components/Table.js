@@ -17,10 +17,7 @@ function TableProblems(props) {
       render : data=>(
         <Link to={'/Problem/'+data.pk}>{data.title}</Link>
        ),
-       sorter: {
-        compare: (a, b) => a.title.length - b.title.length,
-        sortDirections: ['descend'],
-      }
+      sorter: (a, b) => { return a.title.localeCompare(b.title)}
     },
     {
       title: "Categoría",
@@ -29,8 +26,7 @@ function TableProblems(props) {
         <>
           {categories.map(tag => (
             <Tag color="blue" key={tag.name}>
-              <a href={"/list-filter/category/" + tag.name}>{tag.name}</a>
-             
+               <a href={`/list-filter/category/${tag.name}`}> {tag.name}</a>
             </Tag>
           ))}
         </>
@@ -39,10 +35,7 @@ function TableProblems(props) {
     {
       title: "Dificultad",
       dataIndex: "difficulty",
-      sorter: {
-        compare: (a, b) => a.difficulty.length - b.difficulty.length,
-        sortDirections: ['descend'],
-      }
+      sorter: (a, b) => { return a.difficulty.localeCompare(b.difficulty)}
       
     }
 

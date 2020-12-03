@@ -5,7 +5,7 @@ import {
     UserOutlined,
   } from '@ant-design/icons';
   
-
+  const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 class SideBar extends React.Component {
@@ -32,7 +32,14 @@ class SideBar extends React.Component {
       
       return (
         <Layout>
-          
+          <Sider
+      style={{
+        overflow: 'auto',
+        height: '95vh',
+        
+        left: 0,
+      }}
+    >
             <div className="logo" />
             <Menu theme="dark"  mode="inline" defaultOpenKeys={['sub2']}>
 
@@ -56,7 +63,7 @@ class SideBar extends React.Component {
               </SubMenu>
               
             </Menu>
-          
+            </Sider>
           </Layout>
 
           
