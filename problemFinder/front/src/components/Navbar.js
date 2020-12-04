@@ -32,7 +32,7 @@ function NavBarr() {
                 <Nav className="mr-auto">
                 
                
-                <Nav.Link> <Link to="/">Lista de Problemas</Link></Nav.Link>
+                <Nav.Link href="/"> Lista de Problemas</Nav.Link>
                 
                         
                 </Nav>
