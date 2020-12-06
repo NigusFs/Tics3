@@ -121,3 +121,10 @@ def start_daemon(request):
     return JsonResponse({
         'description': 'Finished ! :)'
     }, status=200)
+
+@require_http_methods(["GET"])
+def user_is_auth(request):
+    print(request.session.get("sessionid"))
+    return JsonResponse({
+        'description': request.user.is_authenticated
+    }, status=200)

@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom'
 import { Button, Modal, Form, Input, Radio } from 'antd';
 import Cookies from 'js-cookie'
 import { message, Space } from 'antd';
@@ -27,7 +28,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
     <Modal
       visible={visible}
       title="Autentificacion"
-      okText="Eliminar"
+      okText="Conectarse"
       cancelText="Cancelar"
       onCancel={onCancel}
       onOk={() => {
@@ -61,83 +62,45 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           rules={[{ required: true, message: 'Rellene este campo' }]}>
           <Input.Password />
         </Form.Item>
-        
       </Form>
     </Modal>
     
   );
 };
 
-
-
 function ModalLogin (props) {
-  const [visible, setVisible] = useState(false);
-  const [postId, setPostId] = useState(null);
-  
-  const onCreate = values => {
+  const [visible, setVisible] = useState(true);
+  const history = useHistory();
 
+  const onCreate = values => {
     const formData= new FormData();
     formData.append('username', values.username);
     formData.append('password', values.password);
-//colocar un if si se esta editando o elimando para usar el mismo codigo
-    
 
-
-    fetch('http://127.0.0.1:8000/finder/user/login/',{
+    fetch('http://127.0.0.1:8000/auth/',{
       method: 'POST',
-      
       body : formData
     })
-    .then((response) => {
-      if(response.status === 200) {
-
-        fetch(`http://127.0.0.1:8000/finder/problem/${props.id_problem}`,{
-        method: 'DELETE',
-      
-      }).then((response)=>{
-
-        if (response.status == 200){
-          message.success(`Se elimino el problema "${props.title_problem}"`,7);
-          
-          setTimeout(()=>{window.history.back();},1500);
-      }else{
-        message.error(`No se pudo eliminar el problema  "${props.title_problem}" `, 5);
-        
-      }
-      
-      })
-
-      }else{
+    .then(response => response.json())
+    .then(res_json => {
+      if(res_json.token){
+        sessionStorage.setItem('token', res_json.token)
+        message.success('Se ha conectado correctamente', 3)
+        history.push('/')
+      } else {
         message.warning('Error al auntentificar', 5);
       }
-
-      
-
-    }, (error) => {
-      console.log(error);
-    });
-    
-    setVisible(false);
-  };
+    })
+  }
 
   return (
-    <a>
-      <Button danger 
-        onClick={() => {
-          setVisible(true);
-        }}
-      >
-        Eliminar
-      </Button>
+    <div>
       <CollectionCreateForm
-      
         visible={visible}
         onCreate={onCreate}
-        onCancel={() => {
-          setVisible(false);
-        }}
+        onCancel={() => {history.push('/')}}
       />
-    </a>
+    </div>
   );
 };
 export default ModalLogin;
