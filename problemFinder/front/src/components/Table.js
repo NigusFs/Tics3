@@ -35,7 +35,7 @@ function TableProblems(props) {
     {
       title: "Dificultad",
       dataIndex: "difficulty",
-      sorter: (a, b) => { return a.difficulty.localeCompare(b.difficulty)}
+      sorter: (a, b) => { return b.difficulty.localeCompare(a.difficulty)}
       
     }
 

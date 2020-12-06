@@ -28,8 +28,8 @@ function NavBarr() {
                 </Navbar.Brand>
 
                 <Nav className="mr-auto">
-                    <Nav.Link> <Link to="/">Lista de Problemas</Link></Nav.Link>
-                    <Nav.Link> <Link to="/login">Login</Link></Nav.Link>
+                    <Nav.Link href="/">Lista de Problemas</Nav.Link>
+                    <Nav.Link href="/login">Login</Nav.Link>
                 </Nav>
             </Navbar>
             <Route exact path="/" component={ListProblems} />
