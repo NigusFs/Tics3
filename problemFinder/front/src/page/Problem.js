@@ -9,9 +9,13 @@ import PdfMake from '../components/PdfMake';
 import {Button, Collapse, message, PageHeader, Tag, Typography } from 'antd';
 import ModalLogin from '../components/ModalLogin';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-
+//import MathJax from 'react-mathjax';
+//import MathJax from 'react-mathjax-preview'
+import MathJax from 'react-mathjax2'
 const { Title, Paragraph  } = Typography;
 const { Panel } = Collapse;
+
+
 
 const is_user_auth = () => {
   const token = sessionStorage.getItem("token")
@@ -37,7 +41,7 @@ const deleteProblem = (id, title) => {
 function Problem ({match}){
   const [data_problem, setData] = useState([]);
   const is_auth = is_user_auth()
-
+  console.log(is_auth)
   const fetchTable = () => {
     fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
     .then(res => res.json())
@@ -59,8 +63,17 @@ function Problem ({match}){
   useEffect(() => {
     fetchTable();
   }, []);
+
+  const aux=(some)=>{
+    const algo = some.match('~[\\s\\S]*?~');
+    console.log(algo)
+    if (algo){
+      return (<MathJax.Provider> <MathJax.Node formula={algo} /> </MathJax.Provider>)
+
+    }
+    return (some)
+  }
   
-  console.log(data_problem.title)
   console.log(localStorage)
     return(  
       <div className="site-page-header-ghost-wrapper">
@@ -82,7 +95,24 @@ function Problem ({match}){
       }
       <Paragraph>{"\n \n"}{"\n \n"}</Paragraph>
       <Paragraph>
-            {(data_problem.content)?(data_problem.content.split('\n').map(content => <Paragraph>{content}</Paragraph>)):null}
+            {(data_problem.content)?(data_problem.content.split('\n').map(line =>
+               <Paragraph>
+                 <MathJax.Context input='ascii'
+                  script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=AM_HTMLorMML"
+                  options={ {
+                asciimath2jax: {
+                     useMathMLspacing: true,
+                     delimiters: [["$$$","$$$"], ["~","~"]],
+                     preview: "none",
+                }
+            } }>
+                  <MathJax.Text inline text={ line }/>
+                 </MathJax.Context>
+                
+                 {/*aux(line)*/}        
+               </Paragraph>
+
+               )):null}
       </Paragraph>
       <Paragraph>
         <Title level={3}> Testcases</Title>

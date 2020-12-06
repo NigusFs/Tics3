@@ -86,7 +86,7 @@ function ModalLogin (props) {
       if(res_json.token){
         sessionStorage.setItem('token', res_json.token)
         message.success('Se ha conectado correctamente', 3)
-        history.push('/')
+        window.history.back()
       } else {
         message.warning('Error al auntentificar', 5);
       }
@@ -98,7 +98,7 @@ function ModalLogin (props) {
       <CollectionCreateForm
         visible={visible}
         onCreate={onCreate}
-        onCancel={() => {history.push('/')}}
+        onCancel={() => {window.history.back()}}
       />
     </div>
   );
