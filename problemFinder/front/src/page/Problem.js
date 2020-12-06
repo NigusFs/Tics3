@@ -9,9 +9,8 @@ import PdfMake from '../components/PdfMake';
 import {Button, Collapse, message, PageHeader, Tag, Typography } from 'antd';
 import ModalLogin from '../components/ModalLogin';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-//import MathJax from 'react-mathjax';
-//import MathJax from 'react-mathjax-preview'
 import MathJax from 'react-mathjax2'
+
 const { Title, Paragraph  } = Typography;
 const { Panel } = Collapse;
 
@@ -64,15 +63,7 @@ function Problem ({match}){
     fetchTable();
   }, []);
 
-  const aux=(some)=>{
-    const algo = some.match('~[\\s\\S]*?~');
-    console.log(algo)
-    if (algo){
-      return (<MathJax.Provider> <MathJax.Node formula={algo} /> </MathJax.Provider>)
 
-    }
-    return (some)
-  }
   
   console.log(localStorage)
     return(  
