@@ -1,103 +1,107 @@
 
 
 import React, {useEffect, useState, Content} from 'react';
-import { PageHeader, Button, Descriptions } from 'antd';
-
 import ReactDOM from 'react-dom';
 import { PDFViewer } from '@react-pdf/renderer';
 
 import './Problem.css';
-import { Collapse } from 'antd';
 import PdfMake from '../components/PdfMake';
-import { Tag } from 'antd';
-import { Typography } from 'antd';
+import {Button, Collapse, message, PageHeader, Tag, Typography } from 'antd';
 import ModalLogin from '../components/ModalLogin';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const { Title, Paragraph  } = Typography;
-
 const { Panel } = Collapse;
 
+const is_user_auth = () => {
+  const token = sessionStorage.getItem("token")
+  if (token){
+    return true
+  }
+  return false
+}
 
-
+const deleteProblem = (id, title) => {
+  fetch(`http://127.0.0.1:8000/finder/problem/${id}`, {
+      method: 'DELETE',
+  }).then((response)=>{
+      if (response.status == 200){
+        message.success(`Se elimino el problema "${title}"`,7);
+        setTimeout(()=>{window.history.back();},1500);
+      } else {
+        message.error(`No se pudo eliminar el problema  "${title}" `, 5); 
+      }
+  })
+}
 
 function Problem ({match}){
   const [data_problem, setData] = useState([]);
+  const is_auth = is_user_auth()
 
-
-  
   const fetchTable = () => {
-     
     fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
-        .then(res => res.json())
-        .then(json => {
-          return setData(json) 
-          
-        } );
-        
+    .then(res => res.json())
+    .then(json => {
+      return setData(json) 
+    });     
+  }
+
+  const getPageHeaderExtras = () => {
+    let extras = [
+      <PdfMake data={data_problem}/>
+    ]
+    if(is_auth) {
+      extras.push(<Link to={'/Edit/Problem/'+data_problem.pk}> <Button key="2">Editar</Button> </Link>)
+      extras.push(<Button danger onClick={() => {deleteProblem(data_problem.pk, data_problem.title)}}>Eliminar</Button>)
+    }
+    return extras
+  }
+  useEffect(() => {
+    fetchTable();
+  }, []);
+  
+  console.log(data_problem.title)
+  console.log(localStorage)
+    return(  
+      <div className="site-page-header-ghost-wrapper">
+      <PageHeader
+        ghost={false}
+        onBack={() => window.history.back()}
+        title= { <Title style={{display: 'flex'}} level={2}> {data_problem.title}</Title>}
+        subTitle ={data_problem.difficulty}
+        extra={getPageHeaderExtras()}
+      >
+      {
+        (data_problem.categories) ?
+        (
+          data_problem.categories.map((tag, index) => (
+            <Tag color="blue" key={tag.name}>
+              <a key={index} href={`/list-filter/category/${tag.name}`}> {tag.name}</a>
+            </Tag>))
+        ) : null
       }
-      useEffect(() => {
-        fetchTable();
-      }, []);
-      
-      console.log(data_problem.title)
-        return(
-      
-        
-         
-        <div className="site-page-header-ghost-wrapper">
-    <PageHeader
-      ghost={false}
-      onBack={() => window.history.back()}
-      
-      title= { <Title  style={{  display: 'flex' }}  level={2}> {data_problem.title}</Title>}
-      subTitle ={data_problem.difficulty}
-      
-      
-
-      extra={
-        [
-        <ModalLogin id_problem={data_problem.pk} title_problem={data_problem.title} />,
-        <Link to={'/Edit/Problem/'+data_problem.pk}> <Button key="2">Editar</Button> </Link>,     
-        <PdfMake data={data_problem}/>
-      ]}
-    >
-      {(data_problem.categories)?
-        (data_problem.categories.map(tag => (
-           <Tag color="blue" key={tag.name}>
-              <a href={`/list-filter/category/${tag.name}`}> {tag.name}</a>
-            </Tag>   )))
-
-        :null}
-        <Paragraph>{"\n \n"}{"\n \n"}</Paragraph>
-        
-        <Paragraph>
-             {(data_problem.content)?(data_problem.content.split('\n').map(content => <Paragraph>{content}</Paragraph>)):null}
+      <Paragraph>{"\n \n"}{"\n \n"}</Paragraph>
+      <Paragraph>
+            {(data_problem.content)?(data_problem.content.split('\n').map(content => <Paragraph>{content}</Paragraph>)):null}
+      </Paragraph>
+      <Paragraph>
+        <Title level={3}> Testcases</Title>
+        { 
+          (data_problem.tests) ?
+          (
+            data_problem.tests.map((tests, index) => (
+              <div key={index}>
+                <Collapse>
+                  <Panel header={"Input "+index}>{tests.input_data.split('\n').map((input, index) => <Paragraph key={index}>{input}</Paragraph>)}</Panel>
+                  <Panel header={"Output "+index}>{tests.output_data.split('\n').map((output,index) => <Paragraph key={index}>{output}</Paragraph>)}</Panel>           
+                </Collapse>
+              </div>
+            ))
+          ) : null}
         </Paragraph>
-        <Paragraph>
-              <Title level={3}> Testcases</Title>
-            
-              { (data_problem.tests)?
-                (data_problem.tests.map((tests,index) => (
-                    <div>
-                      <Collapse>
-                        <Panel header={"Input "+index} key={index}>{tests.input_data.split('\n').map(input => <Paragraph>{input}</Paragraph>)}</Panel>
-                        <Panel header={"Output "+index} key={index}>{tests.output_data.split('\n').map(output => <Paragraph>{output}</Paragraph>)}</Panel>           
-                      </Collapse>
-                    </div>
-                    )))
-                    :null}
-
-        </Paragraph>
-    
-    </PageHeader>
-  </div>
-       
-         
-              
-        
-         
-        );
+      </PageHeader>
+    </div>    
+  );
     
 }  
 
