@@ -37,16 +37,16 @@ def extract_problem(code) -> Problem:
 def extract_testcase(contenido_raw):
 	test_case= []
 
-	if  re.search(r'Sample Input\n(.+?)Sample Output',contenido_raw,re.DOTALL) != None:
+	if  re.search(r'[sS]ample [iI]nput\n(.+?)[sS]ample [oO]utput',contenido_raw,re.DOTALL) != None:
 		many_test_cases = False
-		input_sample_case =  re.search(r'Sample Input\n(.+?)Sample Output',contenido_raw,re.DOTALL)[1].strip()
-		output_sample_case =  re.search(r'\nSample Output\n(.+?)\n(Explanation|\n)',contenido_raw,re.DOTALL)[1].strip()
+		input_sample_case =  re.search(r'[sS]ample [iI]nput\n(.+?)[sS]ample [oO]utput',contenido_raw,re.DOTALL)[1].strip()
+		output_sample_case =  re.search(r'\n[sS]ample [oO]utput\n(.+?)\n(Explanation|\n)',contenido_raw,re.DOTALL)[1].strip()
 		test_case.append(TestCase(input_sample_case,output_sample_case))
 
-	elif re.findall(r'Sample Input \d(.+?)Sample Output',contenido_raw,re.DOTALL) != None :
+	elif re.findall(r'[sS]ample [iI]nput \d(.+?)[sS]ample [oO]utput',contenido_raw,re.DOTALL) != None :
 		many_test_cases = True
-		input_sample_case =  re.findall(r'Sample Input \d(.+?)Sample Output',contenido_raw,re.DOTALL)
-		output_sample_case = re.findall(r'\nSample Output \d(.+?)\n(Sample Input \d|\n|Explanation|Sample Explanation )',contenido_raw,re.DOTALL)
+		input_sample_case =  re.findall(r'[sS]ample [iI]nput \d(.+?)[sS]ample [oO]utput',contenido_raw,re.DOTALL)
+		output_sample_case = re.findall(r'\n[sS]ample [oO]utput \d(.+?)\n([sS]ample [iI]nput \d|\n|Explanation|Sample [eE]xplanation )',contenido_raw,re.DOTALL)
 		
 		for i in range(len(input_sample_case)):
 			t1=TestCase(input_sample_case[i].strip(),output_sample_case[i][0])
@@ -59,9 +59,9 @@ def extract_testcase(contenido_raw):
 def extract_enunciado(contenido_raw,many_test_cases ):
 	try :
 		if many_test_cases:
-			enunciado =  re.search(r'(.*)Sample Input 1',contenido_raw,re.DOTALL)[1].replace('\n', '\n\n ') #sacar el replace si no se quiere con tantos espacios
+			enunciado =  re.search(r'(.*)[sS]ample Input 1',contenido_raw,re.DOTALL)[1].replace('\n', '\n\n ') #sacar el replace si no se quiere con tantos espacios
 		else:
-			enunciado =  re.search(r'(.*)Sample Input',contenido_raw,re.DOTALL)[1].replace('\n', '\n\n ') #sacar el replace si no se quiere con tantos espacios
+			enunciado =  re.search(r'(.*)[sS]ample Input',contenido_raw,re.DOTALL)[1].replace('\n', '\n\n ') #sacar el replace si no se quiere con tantos espacios
 	except:
 		enunciado= contenido_raw
 

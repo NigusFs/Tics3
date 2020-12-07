@@ -59,11 +59,10 @@ function Problem ({match}){
     }
     return extras
   }
+
   useEffect(() => {
     fetchTable();
   }, []);
-
-
   
   console.log(localStorage)
     return(  

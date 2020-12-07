@@ -11,27 +11,68 @@ import EditProblem from '../page/EditProblem';
 import ModalLogin from '../components/ModalLogin';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
+import  {Button, message}  from 'antd';
 
+const is_user_auth = () => {
+    const token = sessionStorage.getItem("token")
+    if (token){
+      return true
+    }
+    return false
+  }
+
+  const startDaemon = () => {
+    setTimeout(()=>{ message.success(`Se ha iniciado la busqueda del demonio`,7);},4500);
+    fetch(`http://127.0.0.1:8000/finder/daemon/`, {
+        method: 'POST',
+    }).then((response)=>{
+        if (response.status == 200){
+          message.success(`Se ha completado la busqueda del demonio`,7);
+          setTimeout(()=>{window.history.back();},1500);
+        } else {
+          message.error(`No se pudo completar la busqueda `, 5); 
+        }
+    })
+  }
 
 function NavBarr() {
+    const nombre="prueba";
+    const is_auth = is_user_auth()
+
+    const buttonDaemon = () => {
+    if(is_auth) {
+        return <Button onClick={startDaemon}  ghost inline> Iniciar demonio </Button>
+      }
+    }
+    const prueba = () => {
+        return console.log("probando");
+        }
     return(
         <Router>
-            <Navbar bg="dark" variant="dark">
-                <Navbar.Brand href="/">
-                    <img
-                        src={Logo}
-                        width="55"
-                        height="55"
-                        className="d-inline-block align-top"
-                        alt="React Bootstrap logo"
-                    />
-                </Navbar.Brand>
+            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+                <Navbar.Brand href="/"> <img src={Logo} width="55" height="55" className="d-inline-block align-top"/></Navbar.Brand>
 
                 <Nav className="mr-auto">
+
+                    {(is_auth)? <Nav.Link onClick={prueba}> Logout</Nav.Link> : <Nav.Link href="/login">Login</Nav.Link>}
                     <Nav.Link href="/">Lista de Problemas</Nav.Link>
-                    <Nav.Link href="/login">Login</Nav.Link>
+                    
+                    
                 </Nav>
+                {(is_auth)? <Navbar.Collapse className="justify-content-center">
+                    <Navbar.Text >
+                        Usuario : {nombre}
+                    </Navbar.Text>
+                </Navbar.Collapse>:null}
+                   
+                <Nav>
+                    {buttonDaemon()}
+                </Nav>
+
+
+               
             </Navbar>
+
             <Route exact path="/" component={ListProblems} />
             <Route exact path="/login" component={ModalLogin}/>
             <Route exact path="/list-problems" component={ListProblems} />
