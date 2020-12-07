@@ -10,7 +10,13 @@ import { Table, Tag} from 'antd';
 
 function TableProblems(props) {
 
- 
+  const checkdiff=(a,b)=>{
+   const diff=["Facil","Medio","Dificil", ""];
+   const a_value=diff.indexOf(a);
+   const b_value=diff.indexOf(b);
+    return  a_value -  b_value;
+  } 
+  
   const columns =[
     {
       title: "Título",
@@ -35,7 +41,10 @@ function TableProblems(props) {
     {
       title: "Dificultad",
       dataIndex: "difficulty",
-      sorter: (a, b) => { return b.difficulty.localeCompare(a.difficulty)}
+      sorter: (a, b) => { 
+        
+        return checkdiff(a.difficulty,b.difficulty);
+      }
       
     }
 

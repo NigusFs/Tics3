@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Logo from '../assests/logo.jpg'
+import Logo from '../assests/cat-white.svg'
 
 import ListProblems from '../page/ListProblems';
 import ListFilterDif from '../page/ListFilterDif';
@@ -28,7 +28,7 @@ const is_user_auth = () => {
     }).then((response)=>{
         if (response.status == 200){
           message.success(`Se ha completado la busqueda del demonio`,7);
-          setTimeout(()=>{window.history.back();},1500);
+          
         } else {
           message.error(`No se pudo completar la busqueda `, 5); 
         }
@@ -36,7 +36,7 @@ const is_user_auth = () => {
   }
 
 function NavBarr() {
-    const nombre="prueba";
+    const nombre=sessionStorage.getItem("user");
     const is_auth = is_user_auth()
 
     const buttonDaemon = () => {
@@ -45,8 +45,10 @@ function NavBarr() {
       }
     }
     const prueba = () => {
-        return console.log("probando");
+        sessionStorage.removeItem("token");
+        window.location.reload(true);
         }
+        
     return(
         <Router>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">

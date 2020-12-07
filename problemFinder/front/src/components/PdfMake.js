@@ -69,7 +69,7 @@ console.log(props)
         Enunciado
       </Text>
        <Text style={styles.text}>
-        {props.data.content}
+        {(props.data.content)?props.data.content.replaceAll("~"," ").replaceAll("$$$"," "):null}
       </Text>
       
        <Text style={styles.subtitle}>

@@ -85,6 +85,7 @@ function ModalLogin (props) {
     .then(res_json => {
       if(res_json.token){
         sessionStorage.setItem('token', res_json.token)
+        sessionStorage.setItem('user', values.username)
         message.success('Se ha conectado correctamente', 3)
         window.history.back()
       } else {
