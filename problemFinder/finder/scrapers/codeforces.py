@@ -21,31 +21,36 @@ def get_problems_url_by_topic(topic):
     url = f"http://codeforces.com/problemset?tags={topic}"
     try:
         response = request.urlopen(url)
-    except error.HTTPError as err:
-        logger.info("Found and error trying to open URL:%s %s"%(url, err))
+        html = response.read()
+        html = html.decode('utf-8')
 
-    html = response.read()
-    html = html.decode('utf-8')
-
-    problems_url = re.findall(r'/problemset/problem/[0-9]+/[a-z A-Z 0-9]+', html)
+        problems_url = re.findall(r'/problemset/problem/[0-9]+/[a-z A-Z 0-9]+', html)
 
     # passing the urls to a set to get rid of duplicates
-    return set(problems_url)
+        return set(problems_url)
+    except error.HTTPError as err:
+        logger.info("Found and error trying to open URL:%s %s"%(url, err))
+        return []
+
+
 
 def get_problems_url_by_page_number(page):
     url = f"https://codeforces.com/problemset/page/{page}"
     try:
         response = request.urlopen(url)
-    except error.HTTPError as err:
-        logger.info("Found and error trying to open URL:%s %s"%(url, err))
+        print(response)
+        html = response.read()
+        response.close()
+        html = html.decode('utf-8')
 
-    html = response.read()
-    html = html.decode('utf-8')
-
-    problems_url = re.findall(r'/problemset/problem/[0-9]+/[a-z A-Z 0-9]+', html)
+        problems_url = re.findall(r'/problemset/problem/[0-9]+/[a-z A-Z 0-9]+', html)
 
     # passing the url to a set to get rid of duplicates
-    return set(problems_url)
+        return set(problems_url)
+
+    except error.HTTPError as err:
+        logger.info("Found and error trying to open URL:%s %s"%(url, err))
+        return []
 
 def get_problems_by_page_number(page) -> List[Problem]:
     problem_urls = get_problems_url_by_page_number(page)
@@ -56,6 +61,7 @@ def get_problem_statement(url) -> Problem:
     try:
         response = request.urlopen(url)
         res = requests.get(url)
+        res.close()
         soup = BeautifulSoup(res.content, 'html.parser')
     except error.HTTPError as err:
         logger.info("Found and error trying to open URL:%s %s"%(url, err))
@@ -77,7 +83,7 @@ def get_problem_statement(url) -> Problem:
             inputs.append(test_case.pre.text.strip())
         else:
             outputs.append(test_case.pre.text.strip())
-    assert len(inputs) == len(outputs) # the amount of inputs and outputs must be the same
+    #assert len(inputs) == len(outputs) # the amount of inputs and outputs must be the same | not always (?) NF
 
     title = re.findall(title_regex, html)[0]
     difficulty = ""

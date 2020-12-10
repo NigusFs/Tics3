@@ -28,7 +28,7 @@ const deleteProblem = (id, title) => {
   fetch(`http://127.0.0.1:8000/finder/problem/${id}`, {
       method: 'DELETE',
   }).then((response)=>{
-      if (response.status == 200){
+      if (response.status === 200){
         message.success(`Se elimino el problema "${title}"`,7);
         setTimeout(()=>{window.history.back();},1500);
       } else {
