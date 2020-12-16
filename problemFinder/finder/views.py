@@ -12,6 +12,7 @@ from .serializers import (
     CategorySerializer,
     ProblemSerializer,
     UserSerializer,
+    TestCaseSerializer,
 )
 
 def user_is_admin(user):
@@ -30,7 +31,6 @@ class ProblemView(View):
         # if not user_is_admin(request.user):
         #     return JsonResponse({"description": "You do not have access"}, status=403)
         problem_serializer = ProblemSerializer(data=request.POST)
-        print(dict(request.POST))
         if problem_serializer.is_valid():
             problem_serializer.save()
             return JsonResponse(problem_serializer.data, status=201)
@@ -127,4 +127,67 @@ def user_is_auth(request):
     print(request.session.get("sessionid"))
     return JsonResponse({
         'description': request.user.is_authenticated
+    }, status=200)
+
+@require_http_methods(['POST'])
+def add_test_case_to_problem(request, problem_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+    test_case_serializer = TestCaseSerializer(data=request.POST)
+    if test_case_serializer.is_valid():
+        test_case = TestCase.objects.create(
+            problem=problem, 
+            input_data=test_case_serializer.data["input_data"],
+            output_data=test_case_serializer.data["output_data"]
+        )
+        test_case.save()
+    else:
+        return JsonResponse(test_case_serializer.errors, status=400)
+    return JsonResponse({
+        'description': 'Testcase created successfully :)'
+    }, status=201)
+
+class TestCaseView(View):
+    def put(self, request, test_case_id):
+        test_case = get_object_or_404(TestCase, pk=test_case_id)
+        test_case_serializer = TestCaseSerializer(data=QueryDict(request.body))
+        if test_case_serializer.is_valid():
+            test_case.input_data = test_case_serializer.data["input_data"]
+            test_case.output_data = test_case_serializer.data["output_data"]
+            test_case.save()
+            return JsonResponse(test_case_serializer.data, status=200)
+        else:
+            return JsonResponse(test_case_serializer.errors, status=400)
+    
+    def delete(self, request, test_case_id):
+        test_case = get_object_or_404(TestCase, pk=test_case_id)
+        test_case.delete()
+        return JsonResponse({
+            'description': "Testcase deleted successfully :)"
+        }, status=200)
+
+@require_http_methods(['DELETE'])
+def remove_category_from_problem(request, problem_id, category_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+    try:
+        category_to_remove = problem.categories.get(pk=category_id)
+        problem.categories.remove(category_to_remove) 
+        return JsonResponse({
+            'description': "category removed successfully :)"
+        }, status=200)
+    except Category.DoesNotExist:
+        return JsonResponse({
+            'description': "could not find that category in the problem categories"
+        }, status=404)
+
+@require_http_methods(["POST"])
+def add_category_to_problem(request, problem_id, category_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+    category = get_object_or_404(Category, pk=category_id)
+    if problem.categories.filter(pk=category.pk).exists():
+        return JsonResponse({
+            'description': "category is already in the problem"
+        }, status=400)
+    problem.categories.add(category)
+    return JsonResponse({
+        'description': "category added successfully :)"
     }, status=200)
