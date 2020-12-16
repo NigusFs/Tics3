@@ -9,12 +9,12 @@ from .models import Category, Problem, TestCase
 class TestCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestCase
-        fields = ['input_data', 'output_data']
+        fields = ['pk', 'input_data', 'output_data']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['pk', 'name']
 
 class ProblemSerializer(serializers.ModelSerializer):
     tests = TestCaseSerializer(many=True)
