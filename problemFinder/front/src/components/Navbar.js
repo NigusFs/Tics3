@@ -29,8 +29,10 @@ const is_user_auth = () => {
         if (response.status == 200){
           message.success(`Se ha completado la busqueda del demonio`,7);
           
+        } else if (response.errors == response.total_judges){
+            message.error(`No se pudo completar la busqueda `, 5);
         } else {
-          message.error(`No se pudo completar la busqueda `, 5); 
+          message.warnig(`Hay ${response.errors } judges caidos`, 5);
         }
     })
   }

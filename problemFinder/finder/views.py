@@ -117,15 +117,18 @@ class ListCategories(View):
 
 @require_http_methods(["POST"])
 def start_daemon(request):
-    check=start_scrapers()
+    check,total=start_scrapers()
     if check ==0:
         return JsonResponse({
             'description': 'Finished ! :)'
         }, status=200)
-    else:
+    elif check >=1:
         return JsonResponse({
-            'description': '{} Errors found :('.format(check)
+            'errors': check,
+            'total_judges':  total
         }, status=503)
+
+
 
 
 @require_http_methods(["GET"])

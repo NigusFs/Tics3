@@ -42,5 +42,5 @@ def start_scrapers():
         judge.running = False
         judge.save()
 
-    return servers_downs
+    return servers_downs,len(judges)
 

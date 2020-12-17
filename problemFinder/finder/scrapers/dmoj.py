@@ -8,11 +8,10 @@ import logging
 from urllib import error, request
 
 #from finder.entities import Problem, TestCase
-#from dataclasses import dataclass
+from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
-
-""" @dataclass
+@dataclass
 class TestCase:
     test_input: str
     output: str
@@ -24,7 +23,7 @@ class Problem:
     difficulty: str
     source: str
     testcases: List[TestCase]
-    categories: List[str] """
+    categories: List[str]
 
 def extract_many(page=1) -> List[Problem] :
 	headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'}
@@ -119,5 +118,3 @@ def extract_dificultad(code):
 	except:
 		return " "
 
-for i in range (1,5):
-	extract_many(i)
