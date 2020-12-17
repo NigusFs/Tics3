@@ -112,6 +112,9 @@ function Problem ({match}){
             data_problem.tests.map((tests, index) => (
               <div key={index}>
                 <Collapse>
+                <Panel header={index}>
+                  
+                </Panel>
                   <Panel header={"Input "+index}>{tests.input_data.split('\n').map((input, index) => <Paragraph key={index}>{input}</Paragraph>)}</Panel>
                   <Panel header={"Output "+index}>{tests.output_data.split('\n').map((output,index) => <Paragraph key={index}>{output}</Paragraph>)}</Panel>           
                 </Collapse>

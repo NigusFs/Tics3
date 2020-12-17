@@ -104,24 +104,6 @@ function EditProblem ({match}){
     }
     formBody = formBody.join("&");
 
-    /*const formProblem=new FormData();
-    console.log(values.Enunciado)
-    
-    formProblem.append('title', values.Titulo);
-    formProblem.append('categories', values.Categoria);
-    formProblem.append('difficulty', values.Dificultad);
-    formProblem.append('content', values.Enunciado);
-    *
-    //colocar un append a un arreglo que tenga todos los input y out separados por testcase
-    formProblem.append('tests', []);
-    
-    //console.log(aux)
-    //console.log(values.Categoria)
-    if (JSON.stringify(aux)!==JSON.stringify(values.Categoria)){
-      values.Categoria=values.Categoria.split(",")
-    console.log("si")
-  }
-*/
   fetch(`http://127.0.0.1:8000/finder/problem/${data_problem.pk}`,{
     method: 'PUT',
     headers: {
@@ -134,13 +116,13 @@ function EditProblem ({match}){
     if (response.status === 200){
       
       
-      message.success(`Se edito el problema "${data_problem.title}"`,7);
+      message.success(`Se edito la categoria del problema "${data_problem.title}"`,7);
           
       setTimeout(()=>{window.history.back();},1500);
      
    }else{
    
-   message.error(`No se pudo modificar el problema  "${data_problem.title}" `, 5);
+   message.error(`No se pudo editar la categoria del problema  "${data_problem.title}" `, 5);
     
     }})
 
@@ -163,25 +145,6 @@ function EditProblem ({match}){
 <Paragraph>
     
     <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
-      <Form.Item
-        name="title"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Titulo</Title>}
-        />}
-        colon={false}
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        
-        <TextArea
-          placeholder="Inserte un Titulo"
-          autoSize
-        />
-      </Form.Item>
 
     {<Form.Item
         name="categories"
@@ -198,109 +161,6 @@ function EditProblem ({match}){
         />
         </Form.Item>}
         
-      <Form.Item
-        name="difficulty"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Dificultad</Title>}
-          
-        />}
-        
-      >
-         <TextArea
-          placeholder="Inserte Dificultad"
-          autoSize
-        />
-      </Form.Item>
-      <Form.Item
-        name="content"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Enunciado</Title>}/>}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        
-      >
-         <TextArea
-          placeholder="Inserte  el Enunciado"
-          autoSize
-        />
-      </Form.Item>
-
-     {/*{ (data_problem.tests)?
-                (data_problem.tests.map((tests,index) => (
-                    <div>
-                      <Form.Item
-        name="Tests_in"
-        label={  <PageHeader
-          className="site-page-header"
-        title={<Title level={3}>Testcase Input {index}</Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Input"
-          autoSize
-        />
-      </Form.Item>
-                      
-                                 
-                      
-           <Form.Item
-        name="Tests_out"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Testcase Output {index}</Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Output"
-          autoSize
-        />
-      </Form.Item>
-
-
-                    </div>
-                    )))
-                    :null
-                    
-                    }
-
-    { (data_problem.tests&&data_problem.tests.length===0)? <div>
-                      <Form.Item
-        name="Tests_in"
-        label={  <PageHeader
-          className="site-page-header"
-        title={<Title level={3}>Testcase Input </Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Input"
-          autoSize
-        />
-      </Form.Item>
-                      
-                                 
-                      
-           <Form.Item
-        name="Tests_out"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Testcase Output</Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Output"
-          autoSize
-        />
-      </Form.Item>
-
-
-        </div>:null*/}
-
-
       <Form.Item {...tailLayout}>
     
        
