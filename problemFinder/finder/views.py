@@ -165,29 +165,20 @@ class TestCaseView(View):
             'description': "Testcase deleted successfully :)"
         }, status=200)
 
-@require_http_methods(['DELETE'])
-def remove_category_from_problem(request, problem_id, category_id):
-    problem = get_object_or_404(Problem, pk=problem_id)
-    try:
-        category_to_remove = problem.categories.get(pk=category_id)
-        problem.categories.remove(category_to_remove) 
-        return JsonResponse({
-            'description': "category removed successfully :)"
-        }, status=200)
-    except Category.DoesNotExist:
-        return JsonResponse({
-            'description': "could not find that category in the problem categories"
-        }, status=404)
-
 @require_http_methods(["POST"])
-def add_category_to_problem(request, problem_id, category_id):
+def add_categories_to_problem(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
-    category = get_object_or_404(Category, pk=category_id)
-    if problem.categories.filter(pk=category.pk).exists():
+    categories = request.POST.get("categories", "").strip()
+    problem.categories.clear()
+    if not categories:
         return JsonResponse({
-            'description': "category is already in the problem"
-        }, status=400)
-    problem.categories.add(category)
+            'description': "all categories for the problem were cleared"
+        }, status=200)
+    for category_name in categories.split(","):
+        if problem.categories.filter(name=category_name).exists():
+            continue
+        category, created = Category.objects.get_or_create(name=category_name)
+        problem.categories.add(category)
     return JsonResponse({
-        'description': "category added successfully :)"
+        'description': "categories added successfully :)"
     }, status=200)
