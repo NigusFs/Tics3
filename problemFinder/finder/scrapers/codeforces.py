@@ -23,6 +23,7 @@ def get_problems_url_by_topic(topic):
         response = request.urlopen(url)
     except error.HTTPError as err:
         logger.info("Found and error trying to open URL:%s %s"%(url, err))
+        return []
 
     html = response.read()
     html = html.decode('utf-8')
@@ -38,6 +39,7 @@ def get_problems_url_by_page_number(page):
         response = request.urlopen(url)
     except error.HTTPError as err:
         logger.info("Found and error trying to open URL:%s %s"%(url, err))
+        return []
 
     html = response.read()
     html = html.decode('utf-8')
@@ -77,7 +79,7 @@ def get_problem_statement(url) -> Problem:
             inputs.append(test_case.pre.text.strip())
         else:
             outputs.append(test_case.pre.text.strip())
-    assert len(inputs) == len(outputs) # the amount of inputs and outputs must be the same
+    
 
     title = re.findall(title_regex, html)[0]
     difficulty = ""

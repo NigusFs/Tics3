@@ -1,12 +1,12 @@
 import React, {useEffect, useState, Content} from 'react';
 import ReactDOM from 'react-dom';
 import { Form, Input, Button, Select } from 'antd';
-import { Typography } from "antd";
+import { Typography,Collapse } from "antd";
 import { PageHeader } from 'antd';
-import ModalLoginEdit from '../components/ModalLoginEdit';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Popconfirm } from 'antd';
 import { message} from 'antd';
-
+const { Panel } = Collapse;
 const { TextArea } = Input;
 
 
@@ -30,16 +30,63 @@ const tailLayout = {
 
 
 
+const deleteTestcase = (id) => {
+  fetch(`http://127.0.0.1:8000/finder/testcase/${id}`, {
+      method: 'DELETE',
+  }).then((response)=>{
+      if (response.status === 200){
+        message.success(`Se elimino el testcase "${id}"`,7);
+        setTimeout(()=>{window.location.reload();},2000);
+      } else {
+        message.error(`No se pudo eliminar el testcase  "${id}" `, 5); 
+      }
+  })
+};
+
 
 
 function EditProblem ({match}){
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const [data_problem, setData] = useState([]);
   
-  const cat=['Graph','asdasd']
-  const aux=[];
-  var aux2=[];
+  
+  const arr_categories=[];
+  
+  const onFill = () => {
+    if (data_problem.categories){
+     (data_problem.categories.map(tag => (
+          
+       arr_categories.push(tag.name)
+     )))
+    }
+    console.log(arr_categories)
+     form.setFieldsValue({
+       title: data_problem.title,
+
+       categories:  arr_categories,
+       difficulty: data_problem.difficulty,
+       content: data_problem.content,
+       tests_in: (data_problem.tests)?
+       (data_problem.tests.map(test => (
+          
+              test.input_data
+           )))
+ 
+       :null,
+       Tests_out: (data_problem.tests)?
+       (data_problem.tests.map(test => (
+          
+              test.output_data
+           )))
+ 
+       :null
+     });
    
+   };
+   
+  
+  
   const fetchTable = () => {
     
     fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
@@ -55,14 +102,15 @@ function EditProblem ({match}){
         
       }, []);
 
-      setTimeout(()=>{ onFill();},50);
+      setTimeout(()=>{ onFill();},50); //fill the input text with the previous data
       
-      //console.log(data_problem)
+      
 
   const onFinish = (values) => {
-    aux2=values;
+    
+    console.log(values)
 
-    const aas=23;
+    
     var formBody = [];
     for (var property in values) {
       var encodedKey = encodeURIComponent(property);
@@ -71,32 +119,15 @@ function EditProblem ({match}){
     }
     formBody = formBody.join("&");
 
-    /*const formProblem=new FormData();
-    console.log(values.Enunciado)
-    
-    formProblem.append('title', values.Titulo);
-    formProblem.append('categories', values.Categoria);
-    formProblem.append('difficulty', values.Dificultad);
-    formProblem.append('content', values.Enunciado);
-    *
-    //colocar un append a un arreglo que tenga todos los input y out separados por testcase
-    formProblem.append('tests', []);
-    
-    //console.log(aux)
-    //console.log(values.Categoria)
-    if (JSON.stringify(aux)!==JSON.stringify(values.Categoria)){
-      values.Categoria=values.Categoria.split(",")
-    console.log("si")
-  }
-*/
+
   fetch(`http://127.0.0.1:8000/finder/problem/${data_problem.pk}`,{
     method: 'PUT',
     headers: {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-  },
-  body: formBody
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+              },
+    body: formBody
 
-  }).then((response)=>{
+    }).then((response)=>{
 
     if (response.status === 200){
       
@@ -104,63 +135,28 @@ function EditProblem ({match}){
       message.success(`Se edito el problema "${data_problem.title}"`,7);
           
       setTimeout(()=>{window.history.back();},1500);
-     // setTimeout(()=>{window.history.back();},1500);
-  }else{
-    console.log("")
-   // message.error(`No se pudo modificar el problema  "${data_problem.title}" `, 5);
-    
-  }
-  
-  })
-
-
-    //console.log(values);
-    //console.log(formProblem)
+     
+   }else{
    
+   message.error(`No se pudo modificar el problema  "${data_problem.title}" `, 5);
+    
+    }})
+
   };
 
   const onReset = () => {
     window.history.back();
   };
 
-  const onFill = () => {
-   if (data_problem.categories){
-    (data_problem.categories.map(tag => (
-         
-      aux.push(tag.name)
-    )))
-   }
-    form.setFieldsValue({
-      title: data_problem.title,
-      categories: (data_problem.categories)?
-      (data_problem.categories.map(tag => (
-         
-            tag.name
-          )))
-
-      :null,
-      difficulty: data_problem.difficulty,
-      content: data_problem.content,
-      tests_in: (data_problem.tests)?
-      (data_problem.tests.map(test => (
-         
-             test.input_data
-          )))
-
-      :null,
-      Tests_out: (data_problem.tests)?
-      (data_problem.tests.map(test => (
-         
-             test.output_data
-          )))
-
-      :null
-    });
-  
-  };
-  
-  
-
+  const genExtra = (test_case_id) => (
+  <div> 
+    <Link to={'/edit/testcase/'+test_case_id}><Button>Editar</Button></Link> {" "}
+    <Popconfirm title="Quiere eliminar este testcase？" okText="Si" cancelText="No"  onConfirm={() => {deleteTestcase(test_case_id)}}>
+    <Button type="danger">Eliminar</Button> 
+    </Popconfirm>
+  </div>
+   
+  );
   return (
 
 
@@ -168,7 +164,10 @@ function EditProblem ({match}){
     <PageHeader
       onBack={() => window.history.back()}
       title= { <Title level={3}> Editando el Problema "{data_problem.title}" </Title>}
-         
+      extra={[
+      <Link to={'/edit/category/problem/'+data_problem.pk}> <Button type="primary" key="1">Editar Categoria</Button> </Link>,
+      
+    ]}
     >
 
 <Paragraph>
@@ -194,32 +193,24 @@ function EditProblem ({match}){
         />
       </Form.Item>
 
-      {/*<Form.Item
-        name="category"
-        label={  <PageHeader
-          className="Categoria"
-          title={<Title level={3}>Categoria</Title>}
-          subTitle="Separe las categorias con una coma ( , )"
-        />}
+   
+ 
         
-      >
-         <TextArea
-          placeholder="Inserte  Categorias"
-          autoSize
-        />
-        </Form.Item>*/}
-      
       <Form.Item
         name="difficulty"
         label={  <PageHeader
           className="site-page-header"
           title={<Title level={3}>Dificultad</Title>}
-          
         />}
+        rules={[
+          {
+            required: true,
+          },
+        ]}
         
       >
          <TextArea
-          placeholder="Inserte  Categorias"
+          placeholder="Inserte Dificultad"
           autoSize
         />
       </Form.Item>
@@ -241,79 +232,10 @@ function EditProblem ({match}){
         />
       </Form.Item>
 
-      {/*{ (data_problem.tests)?
-                (data_problem.tests.map((tests,index) => (
-                    <div>
-                      <Form.Item
-        name="Tests_in"
-        label={  <PageHeader
-          className="site-page-header"
-        title={<Title level={3}>Testcase Input {index}</Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Input"
-          autoSize
-        />
-      </Form.Item>
-                      
-                                 
-                      
-           <Form.Item
-        name="Tests_out"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Testcase Output {index}</Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Output"
-          autoSize
-        />
-      </Form.Item>
-
-
-                    </div>
-                    )))
-                    :null
-                    
-                    }
-
-    { (data_problem.tests&&data_problem.tests.length===0)? <div>
-                      <Form.Item
-        name="Tests_in"
-        label={  <PageHeader
-          className="site-page-header"
-        title={<Title level={3}>Testcase Input </Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Input"
-          autoSize
-        />
-      </Form.Item>
-                      
-                                 
-                      
-           <Form.Item
-        name="Tests_out"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Testcase Output</Title>}/>}
-        
-      >
-         <TextArea
-          placeholder="Inserte  Tescase Output"
-          autoSize
-        />
-      </Form.Item>
-
-
-        </div>:null}*/}
 
 
       <Form.Item {...tailLayout}>
-    {/* <ModalLoginEdit id_problem={data_problem.pk} title_problem={data_problem.title} edit_problem={aux2} />*/}
+    
        
        <Button  type="primary" htmlType="submit">
           Editar
@@ -327,6 +249,40 @@ function EditProblem ({match}){
       </Form.Item>
     </Form>
     </Paragraph>
+
+    <Paragraph>
+        <Title level={3}> Testcases</Title>
+        { 
+          (data_problem.tests) ?
+          (
+            data_problem.tests.map((tests, index) => (
+              <div key={index}>
+                <Collapse>
+                <Panel header={`#`+tests.pk } extra={genExtra(tests.pk)} >
+                
+                    <Paragraph> 
+                      <Title level={3}> Input: </Title>
+                          {tests.input_data.split('\n').map((input, index) => <Paragraph key={index}>{input}</Paragraph>)}
+                    </Paragraph>
+                    <Paragraph> 
+                      <Title level={3}> Output: </Title>
+                        {tests.output_data.split('\n').map((output,index) => <Paragraph key={index}>{output}</Paragraph>)}
+                    </Paragraph>
+                    
+                </Panel>                    
+                </Collapse>
+              </div>
+            ))
+          ) : null}
+        </Paragraph>
+        <Link to={"/add/testcase/problem/"+data_problem.pk}><Button type="primary">Agregar un nuevo Testcase</Button></Link>
+              
+                    
+               
+        
+            
+            
+        
     </PageHeader>
   );
 };

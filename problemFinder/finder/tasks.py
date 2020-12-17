@@ -5,6 +5,7 @@ from finder.scrapers.dmoj import extract_many, extract_problem
 
 def start_scrapers():
     judges = JudgesDaemon.objects.all()
+    servers_downs = 0
     for judge in judges:
         judge.running = True
         if judge.judge_name == "codeforces":
@@ -13,6 +14,9 @@ def start_scrapers():
             problems = extract_many(judge.last_page+1) # fix this value
         elif judge.judge_name == "codechef":
             problems = codechef(judge.difficulty, judge.last_page+1, judge.quantity)
+
+        if len(problems)==0: #not caputre any problem -> server downs
+            servers_downs+=1
 
         for problem in problems:
             new_problem = Problem.objects.create(
@@ -37,3 +41,6 @@ def start_scrapers():
         judge.last_page = judge.last_page+1
         judge.running = False
         judge.save()
+
+    return servers_downs,len(judges)
+

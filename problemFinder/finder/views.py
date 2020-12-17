@@ -117,10 +117,19 @@ class ListCategories(View):
 
 @require_http_methods(["POST"])
 def start_daemon(request):
-    start_scrapers()
-    return JsonResponse({
-        'description': 'Finished ! :)'
-    }, status=200)
+    check,total=start_scrapers()
+    if check ==0:
+        return JsonResponse({
+            'description': 'Finished ! :)'
+        }, status=200)
+    elif check >=1:
+        return JsonResponse({
+            'errors': check,
+            'total_judges':  total
+        }, status=503)
+
+
+
 
 @require_http_methods(["GET"])
 def user_is_auth(request):
@@ -164,6 +173,12 @@ class TestCaseView(View):
         return JsonResponse({
             'description': "Testcase deleted successfully :)"
         }, status=200)
+
+    def get(self, request, test_case_id):
+        testcase = get_object_or_404(TestCase, pk=test_case_id)
+        testcase_serializer = TestCaseSerializer(testcase)
+        return JsonResponse(testcase_serializer.data, safe=False, status=200)
+
 
 @require_http_methods(["POST"])
 def add_categories_to_problem(request, problem_id):
