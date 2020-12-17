@@ -30,30 +30,23 @@ const tailLayout = {
 };
 
 
-function EditProblem ({match}){
+function EditTCaseProblem ({match}){
   const [form] = Form.useForm();
-  const [data_problem, setData] = useState([]);
-  const history = useHistory()
+
+  const [data_testcase, setData] = useState([]);
   
-  var arr_categories=[];
+ 
   
   const onFill = () => {
-    if (data_problem.categories){
-     (data_problem.categories.map(tag => (
-          
-      arr_categories.push(tag.name)
-     )))
-     
-    }
-
     
-     form.setFieldsValue({ categories:  arr_categories });
+     form.setFieldsValue({ input_data : data_testcase.input_data, output_data : data_testcase.output_data });
+     
    };
    
   
   const fetchTable = () => {
     
-    fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
+    fetch(`http://127.0.0.1:8000/finder/testcase/${match.params.Id}`)
         .then(res => res.json())
         .then(json => {
           return setData(json) 
@@ -68,30 +61,40 @@ function EditProblem ({match}){
 
       setTimeout(()=>{ onFill();},50); //fill the input text with the previous data
       
-
+     
 
   const onFinish = (values) => {
     
     console.log(values)
     const formData= new FormData();
-    formData.append('categories', values.categories);
+
+    var formBody = [];
+    for (var property in values) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(values[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
  
-  fetch(`http://127.0.0.1:8000/finder/category/${data_problem.pk}`,{
-    method: 'POST',
-    body: formData
+  fetch(`http://127.0.0.1:8000/finder/testcase/${match.params.Id}`,{
+    method: 'PUT',
+    headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+              },
+    body: formBody
 
     }).then((response)=>{
 
     if (response.status === 200){
       
       
-      message.success(`Se edito la categoria del problema "${data_problem.title}"`,7);
+      message.success(`Se edito el testcase "${match.params.Id}"`,7);
           
-      setTimeout(()=>{history.push('/');},1500);
+      setTimeout(()=>{window.history.back();},1500);
      
    }else{
    
-   message.error(`No se pudo editar la categoria del problema  "${data_problem.title}" `, 5);
+   message.error(`No se pudo editar el testcase "${match.params.Id}" `, 5);
     
     }})
 
@@ -108,27 +111,41 @@ function EditProblem ({match}){
 
     <PageHeader
       onBack={() => window.history.back()}
-      title= { <Title level={3}> Editando el Problema "{data_problem.title}" </Title>}
+      title= { <Title level={3}> Editando el testcase  {match.params.Id} </Title>}
     >
 
-<Paragraph>
-    
-    <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
-
-    {<Form.Item
-        name="categories"
+  <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
+      <Form.Item
+        name="input_data"
         label={  <PageHeader
-          className="Categoria"
-          title={<Title level={3}>Categoria</Title>}
-          subTitle="Separe las categorias con una coma ( , )"
-        />}      
+          className="site-page-header"
+          title={<Title level={3}>Input</Title>}
+        />}
+        colon={false}
+       
       >
-         <TextArea
-          placeholder="Inserte  Categorias"
+        
+        <TextArea
+          placeholder="Inserte input testcase "
           autoSize
         />
-        </Form.Item>}
+      </Form.Item>
+
+      <Form.Item
+        name="output_data"
+        label={  <PageHeader
+          className="site-page-header"
+          title={<Title level={3}>Output</Title>}
+        />}
+        colon={false}
+       
+      >
         
+        <TextArea
+          placeholder="Inserte output testcase "
+          autoSize
+        />
+      </Form.Item>
       <Form.Item {...tailLayout}>
     
        
@@ -142,10 +159,14 @@ function EditProblem ({match}){
         </Button>
         </Popconfirm>
       </Form.Item>
-    </Form>
-    </Paragraph>
+  </Form>
+      
+    
+       
+      
+    
     </PageHeader>
   );
 };
 
-export default EditProblem
+export default EditTCaseProblem

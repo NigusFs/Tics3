@@ -174,6 +174,12 @@ class TestCaseView(View):
             'description': "Testcase deleted successfully :)"
         }, status=200)
 
+    def get(self, request, test_case_id):
+        testcase = get_object_or_404(TestCase, pk=test_case_id)
+        testcase_serializer = TestCaseSerializer(testcase)
+        return JsonResponse(testcase_serializer.data, safe=False, status=200)
+
+
 @require_http_methods(["POST"])
 def add_categories_to_problem(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)

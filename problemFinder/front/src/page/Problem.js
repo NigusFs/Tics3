@@ -54,7 +54,7 @@ function Problem ({match}){
       <PdfMake data={data_problem}/>
     ]
     if(is_auth) {
-      extras.push(<Link to={'/Edit/Problem/'+data_problem.pk}> <Button key="2">Editar</Button> </Link>)
+      extras.push(<Link to={'/edit/problem/'+data_problem.pk}> <Button key="2">Editar</Button> </Link>)
       extras.push(<Button danger onClick={() => {deleteProblem(data_problem.pk, data_problem.title)}}>Eliminar</Button>)
     }
     return extras
@@ -112,11 +112,16 @@ function Problem ({match}){
             data_problem.tests.map((tests, index) => (
               <div key={index}>
                 <Collapse>
-                <Panel header={index}>
-                  
-                </Panel>
-                  <Panel header={"Input "+index}>{tests.input_data.split('\n').map((input, index) => <Paragraph key={index}>{input}</Paragraph>)}</Panel>
-                  <Panel header={"Output "+index}>{tests.output_data.split('\n').map((output,index) => <Paragraph key={index}>{output}</Paragraph>)}</Panel>           
+                <Panel header={`Testcase #`+index} extra={"ID:"+tests.pk}>
+                    <Paragraph> 
+                      <Title level={3}> Input: </Title>
+                          {tests.input_data.split('\n').map((input, index) => <Paragraph key={index}>{input}</Paragraph>)}
+                    </Paragraph>
+                    <Paragraph> 
+                      <Title level={3}> Output: </Title>
+                        {tests.output_data.split('\n').map((output,index) => <Paragraph key={index}>{output}</Paragraph>)}
+                    </Paragraph>
+                </Panel>                    
                 </Collapse>
               </div>
             ))

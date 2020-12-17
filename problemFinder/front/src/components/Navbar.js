@@ -9,6 +9,8 @@ import ListFilterCat from '../page/ListFilterCat';
 import Problem from '../page/Problem';
 import EditProblem from '../page/EditProblem';
 import EditCatProblem from '../page/EditCatProblem';
+import EditTCasesProblem from '../page/EditTCasesProblem';
+import AddTCasesProblem from '../page/AddTCasesProblem';
 import ModalLogin from '../components/ModalLogin';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
@@ -86,6 +88,8 @@ function NavBarr() {
             <Route exact path="/list-filter/category/:category"  component={ListFilterCat} />
             <Route exact path="/edit/problem/:Id" component={EditProblem} />
             <Route exact path="/edit/category/problem/:Id" component={EditCatProblem} />
+            <Route exact path="/edit/testcase/:Id" component={EditTCasesProblem} />
+            <Route exact path="/add/testcase/problem/:Id" component={AddTCasesProblem} />
 
         </Router>
     );
