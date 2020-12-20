@@ -183,10 +183,11 @@ function EditProblem ({match}){
         ]}
         
       >
-         <TextArea
-          placeholder="Inserte Dificultad"
-          autoSize
-        />
+         <Select>
+            <Select.Option value="Facil">Facil</Select.Option>
+            <Select.Option value="Medio">Medio</Select.Option>
+            <Select.Option value="Dificil">Dificil</Select.Option>
+          </Select>
       </Form.Item>
       <Form.Item
         name="content"
