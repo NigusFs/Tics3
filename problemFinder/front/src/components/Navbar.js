@@ -40,7 +40,7 @@ const is_user_auth = () => {
     })
   }
 
-function NavBarr() {
+function NavBar() {
     const nombre=sessionStorage.getItem("user");
     const is_auth = is_user_auth()
 
@@ -49,7 +49,7 @@ function NavBarr() {
         return <Button onClick={startDaemon}  ghost inline> Iniciar demonio </Button>
       }
     }
-    const prueba = () => {
+    const logout = () => {
         sessionStorage.removeItem("token");
         window.location.reload(true);
         }
@@ -61,7 +61,7 @@ function NavBarr() {
 
                 <Nav className="mr-auto">
 
-                    {(is_auth)? <Nav.Link onClick={prueba}> Logout</Nav.Link> : <Nav.Link href="/login">Login</Nav.Link>}
+                    {(is_auth)? <Nav.Link onClick={logout}> Logout</Nav.Link> : <Nav.Link href="/login">Login</Nav.Link>}
                     <Nav.Link href="/">Lista de Problemas</Nav.Link>
                     
                     
@@ -95,4 +95,4 @@ function NavBarr() {
     );
 }
 
-export default NavBarr;
+export default NavBar;
