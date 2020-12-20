@@ -1,7 +1,7 @@
 import React from 'react';
 import './ListFilter.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { Typography } from "antd";
 import {useEffect, useState} from 'react';
 
 import Table from '../components/Table';
@@ -9,7 +9,7 @@ import Sidebar from '../components/Sidebar';
 
 import 'antd/dist/antd.css'
 import { Layout } from 'antd';
-
+const { Title } = Typography;
 
 const { Content, Sider } = Layout;
 
@@ -42,6 +42,7 @@ function ListFilterDif ({match}){
             margin: 0,
             minHeight: 280,
           }}>
+            <Title level={4}>Problemas con la categoria: {match.params.category}</Title>
            <Table list_problems={data_filter}/>
         </Content>
         
