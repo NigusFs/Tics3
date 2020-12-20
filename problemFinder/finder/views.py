@@ -4,7 +4,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
 from django.shortcuts import get_object_or_404
 from django.views import View
+from rest_framework.views import APIView
 from django.views.decorators.http import require_http_methods
+
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 
 from .models import Problem, TestCase, Category
 from .tasks import start_scrapers
@@ -15,21 +20,22 @@ from .serializers import (
     TestCaseSerializer,
 )
 
-def user_is_admin(user):
-    return user.groups.filter(name='admin').exists()
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
 
 def user_is_admin(user):
     return user.groups.filter(name='admin').exists()
 
-class ProblemView(View):
+class ProblemView(APIView):
+    permission_classes = [IsAuthenticated|ReadOnly]
+
     def get(self, request, problem_id):
         problem = get_object_or_404(Problem, pk=problem_id)
         problem_serializer = ProblemSerializer(problem)
         return JsonResponse(problem_serializer.data, status=200)
 
     def post(self, request):
-        # if not user_is_admin(request.user):
-        #     return JsonResponse({"description": "You do not have access"}, status=403)
         problem_serializer = ProblemSerializer(data=request.POST)
         if problem_serializer.is_valid():
             problem_serializer.save()
@@ -103,7 +109,8 @@ def login_view(request):
     return JsonResponse({'description': 'Could not Log in :('}, status=404)
 
 def logout_view(request):
-    logout(request)
+    token = get_object_or_404(Token, key=request.POST.get("token"))
+    token.delete()
     return JsonResponse({
         'description': 'Succesfully Logged out ! :)'
     }, status=200)
@@ -116,6 +123,7 @@ class ListCategories(View):
         return JsonResponse(category_serializer.data, safe=False, status=200)
 
 @require_http_methods(["POST"])
+@permission_classes((IsAuthenticated,))
 def start_daemon(request):
     check,total=start_scrapers()
     if check ==0:
@@ -131,14 +139,8 @@ def start_daemon(request):
 
 
 
-@require_http_methods(["GET"])
-def user_is_auth(request):
-    print(request.session.get("sessionid"))
-    return JsonResponse({
-        'description': request.user.is_authenticated
-    }, status=200)
-
 @require_http_methods(['POST'])
+@permission_classes((IsAuthenticated,))
 def add_test_case_to_problem(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     test_case_serializer = TestCaseSerializer(data=request.POST)
@@ -156,6 +158,8 @@ def add_test_case_to_problem(request, problem_id):
     }, status=201)
 
 class TestCaseView(View):
+    permission_classes = [IsAuthenticated]
+
     def put(self, request, test_case_id):
         test_case = get_object_or_404(TestCase, pk=test_case_id)
         test_case_serializer = TestCaseSerializer(data=QueryDict(request.body))
@@ -181,6 +185,7 @@ class TestCaseView(View):
 
 
 @require_http_methods(["POST"])
+@permission_classes((IsAuthenticated,))
 def add_categories_to_problem(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     categories = request.POST.get("categories", "").strip()

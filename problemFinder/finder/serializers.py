@@ -37,7 +37,6 @@ class ProblemSerializer(serializers.ModelSerializer):
         for test in tests:
             TestCase.objects.create(problem=problem, **test)
         for category in categories:
-            print(category)
             cat, created = Category.objects.get_or_create(**category)
             if created:
                 cat.save()
