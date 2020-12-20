@@ -33,25 +33,21 @@ class SideBar extends React.Component {
       return (
         <Layout>
           <Sider
-      style={{
-        overflow: 'auto',
-        height: '95vh',
-        
-        left: 0,
-      }}
+
     >
             <div className="logo" />
-            <Menu theme="dark"  mode="inline" defaultOpenKeys={['sub2']}>
+            <Menu theme="dark"  mode="vertical" >
 
               {/*<Menu.Item key="10" icon={<FileOutlined />}>
                 <Link to ="/">Descargar</Link> 
               </Menu.Item>
               */}
-              <SubMenu key="sub2" icon={<TeamOutlined />} title="Dificultad">
+
+              {/*<SubMenu key="sub2" icon={<TeamOutlined />} title="Dificultad">
                 <Menu.Item key="6"> <a href="/list-filter/difficulty/Facil">Fácil</a> </Menu.Item>
                 <Menu.Item key="8"> <a href="/list-filter/difficulty/Medio">Medio</a></Menu.Item>
                 <Menu.Item key="9"><a href="/list-filter/difficulty/Dificil">Dificil</a></Menu.Item>
-              </SubMenu>
+            </SubMenu>*/}
 
               <SubMenu key="sub1" icon={<UserOutlined />} title="Categorías">
 

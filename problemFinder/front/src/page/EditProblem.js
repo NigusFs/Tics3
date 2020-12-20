@@ -46,11 +46,11 @@ const deleteTestcase = (id) => {
 
 
 function EditProblem ({match}){
+
+
+
   const [form] = Form.useForm();
-  const [form1] = Form.useForm();
   const [data_problem, setData] = useState([]);
-  
-  
   const arr_categories=[];
   
   const onFill = () => {
@@ -60,27 +60,16 @@ function EditProblem ({match}){
        arr_categories.push(tag.name)
      )))
     }
-    console.log(arr_categories)
-     form.setFieldsValue({
-       title: data_problem.title,
 
+     form.setFieldsValue({
+
+       title: data_problem.title,
        categories:  arr_categories,
        difficulty: data_problem.difficulty,
        content: data_problem.content,
-       tests_in: (data_problem.tests)?
-       (data_problem.tests.map(test => (
-          
-              test.input_data
-           )))
- 
-       :null,
-       Tests_out: (data_problem.tests)?
-       (data_problem.tests.map(test => (
-          
-              test.output_data
-           )))
- 
-       :null
+       tests_in: (data_problem.tests)?(data_problem.tests.map(test => (test.input_data))):null,
+       Tests_out: (data_problem.tests)?(data_problem.tests.map(test => (test.output_data))):null
+
      });
    
    };
@@ -91,64 +80,52 @@ function EditProblem ({match}){
     
     fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
         .then(res => res.json())
-        .then(json => {
-          return setData(json) 
-          
-        } );
+        .then(json => {return setData(json)});
         
-      }
-      useEffect(() => {
-        fetchTable();
-        
-      }, []);
+  }
 
-      setTimeout(()=>{ onFill();},50); //fill the input text with the previous data
+    useEffect(() => {fetchTable();}, []);
+
+    setTimeout(()=>{ onFill();},50); //fill the input text with the previous data
       
       
 
   const onFinish = (values) => {
-    
-    console.log(values)
+ 
 
-    
     var formBody = [];
     for (var property in values) {
       var encodedKey = encodeURIComponent(property);
       var encodedValue = encodeURIComponent(values[property]);
       formBody.push(encodedKey + "=" + encodedValue);
     }
+
     formBody = formBody.join("&");
 
+    fetch(`http://127.0.0.1:8000/finder/problem/${data_problem.pk}`,{
+      method: 'PUT',
+      headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                },
+      body: formBody
 
-  fetch(`http://127.0.0.1:8000/finder/problem/${data_problem.pk}`,{
-    method: 'PUT',
-    headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-              },
-    body: formBody
+      }).then((response)=>{
 
-    }).then((response)=>{
-
-    if (response.status === 200){
+      if (response.status === 200){
+        message.success(`Se edito el problema "${data_problem.title}"`,7); 
+        setTimeout(()=>{window.history.back();},1500);
       
+      }else{
+        message.error(`No se pudo modificar el problema  "${data_problem.title}" `, 5);
       
-      message.success(`Se edito el problema "${data_problem.title}"`,7);
-          
-      setTimeout(()=>{window.history.back();},1500);
-     
-   }else{
-   
-   message.error(`No se pudo modificar el problema  "${data_problem.title}" `, 5);
-    
-    }})
+      }})
 
   };
 
-  const onReset = () => {
-    window.history.back();
-  };
+  const onReset = () => {window.history.back();};
 
   const genExtra = (test_case_id) => (
+
   <div> 
     <Link to={'/edit/testcase/'+test_case_id}><Button>Editar</Button></Link> {" "}
     <Popconfirm title="Quiere eliminar este testcase？" okText="Si" cancelText="No"  onConfirm={() => {deleteTestcase(test_case_id)}}>
@@ -157,17 +134,14 @@ function EditProblem ({match}){
   </div>
    
   );
+
   return (
 
-
-
-    <PageHeader
+   <PageHeader
       onBack={() => window.history.back()}
       title= { <Title level={3}> Editando el Problema "{data_problem.title}" </Title>}
-      extra={[
-      <Link to={'/edit/category/problem/'+data_problem.pk}> <Button type="primary" key="1">Editar Categoria</Button> </Link>,
-      
-    ]}
+      extra={[<Link to={'/edit/category/problem/'+data_problem.pk}> <Button type="primary" key="1">Editar Categoria</Button> </Link>,
+      ]}
     >
 
 <Paragraph>
@@ -209,10 +183,11 @@ function EditProblem ({match}){
         ]}
         
       >
-         <TextArea
-          placeholder="Inserte Dificultad"
-          autoSize
-        />
+         <Select>
+            <Select.Option value="Facil">Facil</Select.Option>
+            <Select.Option value="Medio">Medio</Select.Option>
+            <Select.Option value="Dificil">Dificil</Select.Option>
+          </Select>
       </Form.Item>
       <Form.Item
         name="content"
