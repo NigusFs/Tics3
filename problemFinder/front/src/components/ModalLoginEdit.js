@@ -57,7 +57,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         </Form.Item>
         <Form.Item 
           name="password" 
-          label="Constraseña"
+          label="Contraseña"
           rules={[{ required: true, message: 'Rellene este campo' }]}>
           <Input.Password />
         </Form.Item>
