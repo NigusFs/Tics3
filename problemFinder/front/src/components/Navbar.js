@@ -28,6 +28,9 @@ const is_user_auth = () => {
     setTimeout(()=>{ message.success(`Se ha iniciado la busqueda del demonio`,7);},4500);
     fetch(`http://127.0.0.1:8000/finder/daemon/`, {
         method: 'POST',
+        headers: {
+          'Authorization': 'Token ' + sessionStorage.getItem("token")
+        }
     }).then((response)=>{
         if (response.status == 200){
           message.success(`Se ha completado la busqueda del demonio`,7);

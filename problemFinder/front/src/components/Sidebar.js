@@ -23,8 +23,6 @@ class SideBar extends React.Component {
       fetch('http://127.0.0.1:8000/finder/categories')
       .then(response => response.json())
       .then(data => this.setState({data}));
-      
-      
     }
     
     render() {

@@ -5,6 +5,7 @@ import { Form, Input, Button, Select } from 'antd';
 import { Typography,Collapse } from "antd";
 import { PageHeader } from 'antd';
 import ModalLoginEdit from '../components/ModalLoginEdit';
+import NotAuth from '../components/NotAuth';
 import { Popconfirm } from 'antd';
 import { message} from 'antd';
 const { Panel } = Collapse;
@@ -29,14 +30,19 @@ const tailLayout = {
   },
 };
 
+const is_user_auth = () => {
+  const token = sessionStorage.getItem("token")
+  if (token) {
+    return true
+  }
+  return false
+}
 
 function EditTCaseProblem ({match}){
   const [form] = Form.useForm();
-
   const [data_testcase, setData] = useState([]);
-  
- 
-  
+  const is_auth = is_user_auth()
+
   const onFill = () => {
     
      form.setFieldsValue({ input_data : data_testcase.input_data, output_data : data_testcase.output_data });
@@ -79,8 +85,9 @@ function EditTCaseProblem ({match}){
   fetch(`http://127.0.0.1:8000/finder/testcase/${match.params.Id}`,{
     method: 'PUT',
     headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-              },
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      'Authorization': 'Token ' + sessionStorage.getItem("token")
+    },
     body: formBody
 
     }).then((response)=>{
@@ -106,66 +113,58 @@ function EditTCaseProblem ({match}){
 
 
   return (
-
-
-
-    <PageHeader
-      onBack={() => window.history.back()}
-      title= { <Title level={3}> Editando el testcase  {match.params.Id} </Title>}
-    >
-
-  <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
-      <Form.Item
-        name="input_data"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Input</Title>}
-        />}
-        colon={false}
-       
+    <div>
+    {
+      !is_auth ? <NotAuth/> :
+      <PageHeader
+        onBack={() => window.history.back()}
+        title= { <Title level={3}> Editando el testcase  {match.params.Id} </Title>}
       >
-        
-        <TextArea
-          placeholder="Inserte input testcase "
-          autoSize
-        />
-      </Form.Item>
+      <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
+          <Form.Item
+            name="input_data"
+            label={  <PageHeader
+              className="site-page-header"
+              title={<Title level={3}>Input</Title>}
+            />}
+            colon={false}
+          
+          >
+            <TextArea
+              placeholder="Inserte input testcase "
+              autoSize
+            />
+          </Form.Item>
 
-      <Form.Item
-        name="output_data"
-        label={  <PageHeader
-          className="site-page-header"
-          title={<Title level={3}>Output</Title>}
-        />}
-        colon={false}
-       
-      >
-        
-        <TextArea
-          placeholder="Inserte output testcase "
-          autoSize
-        />
-      </Form.Item>
-      <Form.Item {...tailLayout}>
-    
-       
-       <Button  type="primary" htmlType="submit">
-          Editar
-        </Button>
-        {" "}
-       <Popconfirm title="Quiere cancelar la edición？" okText="Si" cancelText="No" onConfirm={onReset}>
-      <Button htmlType="button">
-          Cancelar
-        </Button>
-        </Popconfirm>
-      </Form.Item>
-  </Form>
-      
-    
-       
-      
-    
-    </PageHeader>
+          <Form.Item
+            name="output_data"
+            label={  <PageHeader
+              className="site-page-header"
+              title={<Title level={3}>Output</Title>}
+            />}
+            colon={false}
+          
+          >
+            <TextArea
+              placeholder="Inserte output testcase "
+              autoSize
+            />
+          </Form.Item>
+          <Form.Item {...tailLayout}>
+          <Button  type="primary" htmlType="submit">
+              Editar
+            </Button>
+            {" "}
+          <Popconfirm title="Quiere cancelar la edición？" okText="Si" cancelText="No" onConfirm={onReset}>
+          <Button htmlType="button">
+              Cancelar
+            </Button>
+            </Popconfirm>
+          </Form.Item>
+      </Form>
+      </PageHeader>
+    }
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import { Form, Input, Button, Select } from 'antd';
 import { Typography,Collapse } from "antd";
 import { PageHeader } from 'antd';
 import ModalLoginEdit from '../components/ModalLoginEdit';
+import NotAuth from '../components/NotAuth';
 import { Popconfirm } from 'antd';
 import { message} from 'antd';
 const { Panel } = Collapse;
@@ -29,55 +30,53 @@ const tailLayout = {
   },
 };
 
+const is_user_auth = () => {
+  const token = sessionStorage.getItem("token")
+  if (token) {
+    return true
+  }
+  return false
+}
 
 function EditProblem ({match}){
   const [form] = Form.useForm();
   const [data_problem, setData] = useState([]);
   const history = useHistory()
+  const is_auth = is_user_auth()
   
   var arr_categories=[];
   
   const onFill = () => {
     if (data_problem.categories){
      (data_problem.categories.map(tag => (
-          
       arr_categories.push(tag.name)
      )))
-     
     }
-
-    
      form.setFieldsValue({ categories:  arr_categories });
    };
-   
-  
   const fetchTable = () => {
     
     fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
         .then(res => res.json())
         .then(json => {
           return setData(json) 
-          
-        } );
-        
+        });
       }
       useEffect(() => {
         fetchTable();
-        
       }, []);
-
       setTimeout(()=>{ onFill();},50); //fill the input text with the previous data
-      
-
 
   const onFinish = (values) => {
-    
     console.log(values)
     const formData= new FormData();
     formData.append('categories', values.categories);
  
   fetch(`http://127.0.0.1:8000/finder/category/${data_problem.pk}`,{
     method: 'POST',
+    headers: {
+      'Authorization': 'Token ' + sessionStorage.getItem("token")
+    },
     body: formData
 
     }).then((response)=>{
@@ -103,15 +102,14 @@ function EditProblem ({match}){
 
 
   return (
-
-
-
+    <div>
+      {!is_auth ? <NotAuth/> : 
     <PageHeader
       onBack={() => window.history.back()}
       title= { <Title level={3}> Editando el Problema "{data_problem.title}" </Title>}
     >
 
-<Paragraph>
+    <Paragraph>
     
     <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
 
@@ -145,6 +143,8 @@ function EditProblem ({match}){
     </Form>
     </Paragraph>
     </PageHeader>
+  }
+</div>
   );
 };
 

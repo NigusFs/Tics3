@@ -115,7 +115,6 @@ def logout_view(request):
         'description': 'Succesfully Logged out ! :)'
     }, status=200)
 
-
 class ListCategories(View): 
     def get(self, request):
         list_categories = Category.objects.all()
@@ -136,9 +135,6 @@ def start_daemon(request):
             'total_judges':  total
         }, status=503)
 
-
-
-
 @require_http_methods(['POST'])
 @permission_classes((IsAuthenticated,))
 def add_test_case_to_problem(request, problem_id):
@@ -157,8 +153,13 @@ def add_test_case_to_problem(request, problem_id):
         'description': 'Testcase created successfully :)'
     }, status=201)
 
-class TestCaseView(View):
-    permission_classes = [IsAuthenticated]
+class TestCaseView(APIView):
+    permission_classes = [IsAuthenticated|ReadOnly]
+
+    def get(self, request, test_case_id):
+        testcase = get_object_or_404(TestCase, pk=test_case_id)
+        testcase_serializer = TestCaseSerializer(testcase)
+        return JsonResponse(testcase_serializer.data, safe=False, status=200)
 
     def put(self, request, test_case_id):
         test_case = get_object_or_404(TestCase, pk=test_case_id)
@@ -177,12 +178,6 @@ class TestCaseView(View):
         return JsonResponse({
             'description': "Testcase deleted successfully :)"
         }, status=200)
-
-    def get(self, request, test_case_id):
-        testcase = get_object_or_404(TestCase, pk=test_case_id)
-        testcase_serializer = TestCaseSerializer(testcase)
-        return JsonResponse(testcase_serializer.data, safe=False, status=200)
-
 
 @require_http_methods(["POST"])
 @permission_classes((IsAuthenticated,))

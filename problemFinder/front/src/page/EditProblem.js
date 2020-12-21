@@ -6,6 +6,7 @@ import { PageHeader } from 'antd';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Popconfirm } from 'antd';
 import { message} from 'antd';
+import NotAuth from '../components/NotAuth';
 const { Panel } = Collapse;
 const { TextArea } = Input;
 
@@ -28,11 +29,20 @@ const tailLayout = {
   },
 };
 
-
+const is_user_auth = () => {
+  const token = sessionStorage.getItem("token")
+  if (token) {
+    return true
+  }
+  return false
+}
 
 const deleteTestcase = (id) => {
   fetch(`http://127.0.0.1:8000/finder/testcase/${id}`, {
       method: 'DELETE',
+      headers: {
+        'Authorization': 'Token ' + sessionStorage.getItem("token")
+      },
   }).then((response)=>{
       if (response.status === 200){
         message.success(`Se elimino el testcase "${id}"`,7);
@@ -46,9 +56,7 @@ const deleteTestcase = (id) => {
 
 
 function EditProblem ({match}){
-
-
-
+  const is_auth = is_user_auth()
   const [form] = Form.useForm();
   const [data_problem, setData] = useState([]);
   const arr_categories=[];
@@ -62,7 +70,6 @@ function EditProblem ({match}){
     }
 
      form.setFieldsValue({
-
        title: data_problem.title,
        categories:  arr_categories,
        difficulty: data_problem.difficulty,
@@ -81,7 +88,6 @@ function EditProblem ({match}){
     fetch(`http://127.0.0.1:8000/finder/problem/${match.params.Id}`)
         .then(res => res.json())
         .then(json => {return setData(json)});
-        
   }
 
     useEffect(() => {fetchTable();}, []);
@@ -105,10 +111,10 @@ function EditProblem ({match}){
     fetch(`http://127.0.0.1:8000/finder/problem/${data_problem.pk}`,{
       method: 'PUT',
       headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-                },
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        'Authorization': 'Token ' + sessionStorage.getItem("token")
+      },
       body: formBody
-
       }).then((response)=>{
 
       if (response.status === 200){
@@ -136,7 +142,9 @@ function EditProblem ({match}){
   );
 
   return (
-
+    <div>
+    {
+      !is_auth ? <NotAuth/> : 
    <PageHeader
       onBack={() => window.history.back()}
       title= { <Title level={3}> Editando el Problema "{data_problem.title}" </Title>}
@@ -145,7 +153,6 @@ function EditProblem ({match}){
     >
 
 <Paragraph>
-    
     <Form   form={form} name="control-hooks"  layout="vertical" onFinish={onFinish}>
       <Form.Item
         name="title"
@@ -160,16 +167,11 @@ function EditProblem ({match}){
           },
         ]}
       >
-        
         <TextArea
           placeholder="Inserte un Titulo"
           autoSize
         />
       </Form.Item>
-
-   
- 
-        
       <Form.Item
         name="difficulty"
         label={  <PageHeader
@@ -251,14 +253,9 @@ function EditProblem ({match}){
           ) : null}
         </Paragraph>
         <Link to={"/add/testcase/problem/"+data_problem.pk}><Button type="primary">Agregar un nuevo Testcase</Button></Link>
-              
-                    
-               
-        
-            
-            
-        
     </PageHeader>
+}
+    </div>
   );
 };
 

@@ -27,6 +27,9 @@ const is_user_auth = () => {
 const deleteProblem = (id, title) => {
   fetch(`http://127.0.0.1:8000/finder/problem/${id}`, {
       method: 'DELETE',
+      headers: {
+        'Authorization': 'Token ' + sessionStorage.getItem("token")
+      },
   }).then((response)=>{
       if (response.status === 200){
         message.success(`Se elimino el problema "${title}"`,7);

@@ -95,14 +95,15 @@ function ModalLogin (props) {
 
     fetch('http://127.0.0.1:8000/finder/user/login/',{
       method: 'POST',
-      
       body : formData
     })
     .then((response) => {
-      if(response.status === 200) {
-
+      if(response.status === 200) {                          
         fetch(`http://127.0.0.1:8000/finder/edit/problem/${props.id_problem}`,{
         method: 'PUT',
+        headers: {
+          'Authorization': 'Token ' + sessionStorage.getItem("token")
+        },
         body : formProblem
       }).then((response)=>{
 
