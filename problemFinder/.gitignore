@@ -4,10 +4,6 @@
 *.pyc
 __pycache__/
 local_settings.py
-finder/migrations/
-problemFinder\finder\migrations\
-\finder\migrations\
-finder/migrations/
 # DB
 db.sqlite3
 db.sqlite3-journal
